@@ -1,4 +1,7 @@
 FROM eclipse-temurin:25
-COPY ./target/classes/com /tmp/com
-WORKDIR /tmp
-ENTRYPOINT ["java", "com.napier.sem.Main"]
+
+WORKDIR /app
+
+COPY target/DevOps_Group_11-1.0-SNAPSHOT.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
