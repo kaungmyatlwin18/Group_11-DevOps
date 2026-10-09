@@ -2,6 +2,7 @@ package com.napier.sem;
 
 import com.napier.sem.report.country.AllCountriesReport;
 import com.napier.sem.report.country.CountriesByContinentReport;
+import com.napier.sem.report.country.CountriesByRegionReport;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -10,6 +11,7 @@ import java.sql.SQLException;
 public final class AutoDisplay {
 
     private static final String DEFAULT_CONTINENT = "Asia";
+    private static final String DEFAULT_REGION = "Eastern Asia";
 
     private AutoDisplay() {
     }
@@ -22,6 +24,9 @@ public final class AutoDisplay {
 
         System.out.println("\n===== ISSUE #4 =====");
         new CountriesByContinentReport().display(connection, DEFAULT_CONTINENT);
+
+        System.out.println("\n===== ISSUE #6 =====");
+        new CountriesByRegionReport().display(connection, DEFAULT_REGION);
 
         System.out.println("\n========== AVAILABLE REPORTS COMPLETED ==========");
     }
