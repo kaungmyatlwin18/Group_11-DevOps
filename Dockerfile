@@ -1,4 +1,4 @@
-FROM eclipse-temurin:25
+FROM public.ecr.aws/docker/library/eclipse-temurin:25
 
 WORKDIR /app
 
