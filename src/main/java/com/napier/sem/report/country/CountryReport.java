@@ -55,6 +55,36 @@ public class CountryReport {
                 selectedRegion);
     }
 
+    /** Issue #8: Top N countries in a selected continent, largest population first. */
+    public void displayTopNCountriesInContinent(Connection connection, String continent, int topN)
+            throws SQLException {
+        if (Objects.toString(continent, "").isBlank()) {
+            throw new IllegalArgumentException("Continent must not be blank");
+        }
+        if (topN <= 0) {
+            throw new IllegalArgumentException("Top N must be greater than zero");
+        }
+        String selectedContinent = continent.trim();
+        executeQuery(connection, "TOP " + topN + " COUNTRIES IN CONTINENT: " + selectedContinent,
+                BASE_QUERY + " WHERE c.Continent = ? ORDER BY c.Population DESC, c.Code ASC LIMIT ?",
+                selectedContinent, topN);
+    }
+
+    /** Issue #9: Top N countries in a selected region, largest population first. */
+    public void displayTopNCountriesInRegion(Connection connection, String region, int topN)
+            throws SQLException {
+        if (Objects.toString(region, "").isBlank()) {
+            throw new IllegalArgumentException("Region must not be blank");
+        }
+        if (topN <= 0) {
+            throw new IllegalArgumentException("Top N must be greater than zero");
+        }
+        String selectedRegion = region.trim();
+        executeQuery(connection, "TOP " + topN + " COUNTRIES IN REGION: " + selectedRegion,
+                BASE_QUERY + " WHERE c.Region = ? ORDER BY c.Population DESC, c.Code ASC LIMIT ?",
+                selectedRegion, topN);
+    }
+
     /** Reusable query execution; user-supplied values must be passed as parameters. */
     public static void executeQuery(Connection connection, String title, String sql,
                                     Object... parameters) throws SQLException {
