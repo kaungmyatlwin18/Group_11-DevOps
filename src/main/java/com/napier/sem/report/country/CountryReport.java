@@ -43,6 +43,18 @@ public class CountryReport {
                 selectedContinent);
     }
 
+    /** Issue #6: Countries in the supplied region, biggest population first. */
+    public void displayCountriesInRegion(Connection connection, String region)
+            throws SQLException {
+        if (Objects.toString(region, "").isBlank()) {
+            throw new IllegalArgumentException("Region must not be blank");
+        }
+        String selectedRegion = region.trim();
+        executeQuery(connection, "ALL COUNTRIES IN " + selectedRegion,
+                BASE_QUERY + " WHERE c.Region = ? ORDER BY c.Population DESC, c.Code ASC",
+                selectedRegion);
+    }
+
     /** Reusable query execution; user-supplied values must be passed as parameters. */
     public static void executeQuery(Connection connection, String title, String sql,
                                     Object... parameters) throws SQLException {
