@@ -1,4 +1,3 @@
-
 name: Maven and Docker CI
 
 on:
