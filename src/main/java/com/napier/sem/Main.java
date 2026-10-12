@@ -1,17 +1,53 @@
 package com.napier.sem;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
+public class Main {
+
+    public static void main(String[] args) {
+
+        DatabaseConnection db = new DatabaseConnection();
+
+        for (int attempt = 1; attempt <= 20; attempt++) {
+            try (
+                    Connection con = db.connect();
+                    Statement stmt = con.createStatement();
+                    ResultSet results = stmt.executeQuery(
+                            "SELECT Name, Population FROM country " +
+                                    "ORDER BY Population DESC LIMIT 5")
+            ) {
+                System.out.println("Successfully connected to World database!");
+
+                while (results.next()) {
+                    System.out.println(
+                            results.getString("Name") + " - " +
+                                    results.getLong("Population")
+                    );
+                }
+
+                return;
+            }
+            catch (SQLException e) {
+                System.out.println(
+                        "Connection attempt " + attempt +
+                                " failed: " + e.getMessage()
+                );
+
+                if (attempt == 20) {
+                    System.exit(1);
+                }
+
+                try {
+                    Thread.sleep(2000);
+                }
+                catch (InterruptedException interrupted) {
+                    Thread.currentThread().interrupt();
+                    System.exit(1);
+                }
+            }
         }
     }
 }
