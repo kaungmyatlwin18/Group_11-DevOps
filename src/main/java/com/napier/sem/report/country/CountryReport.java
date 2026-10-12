@@ -1,0 +1,125 @@
+package com.napier.sem.report.country;
+
+import com.napier.sem.ReportDisplay;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+
+/** Shared SQL/report logic. Other developers can reuse executeQuery for later report issues. */
+public class CountryReport {
+
+    private static final String[] HEADERS = {
+            "Code", "Name", "Continent", "Region", "Population", "Capital"
+    };
+
+    private static final String BASE_QUERY = """
+            SELECT c.Code, c.Name, c.Continent, c.Region, c.Population,
+                   COALESCE(capital.Name, 'N/A') AS Capital
+            FROM country c
+            LEFT JOIN city capital ON c.Capital = capital.ID
+            """;
+
+    /** Issue #2: All countries, biggest population first. */
+    public void displayAllCountries(Connection connection) throws SQLException {
+        executeQuery(connection, "ALL COUNTRIES IN THE WORLD",
+                BASE_QUERY + " ORDER BY c.Population DESC, c.Code ASC");
+    }
+
+    /** Issue #4: Countries in the supplied continent, biggest population first. */
+    public void displayCountriesInContinent(Connection connection, String continent)
+            throws SQLException {
+        if (continent == null || continent.isBlank()) {
+            throw new IllegalArgumentException("Continent must not be blank");
+        }
+        String selectedContinent = continent.trim();
+        executeQuery(connection, "ALL COUNTRIES IN " + selectedContinent,
+                BASE_QUERY + " WHERE c.Continent = ? ORDER BY c.Population DESC, c.Code ASC",
+                selectedContinent);
+    }
+
+    /** Issue #6: Countries in the supplied region, biggest population first. */
+    public void displayCountriesInRegion(Connection connection, String region)
+            throws SQLException {
+        if (Objects.toString(region, "").isBlank()) {
+            throw new IllegalArgumentException("Region must not be blank");
+        }
+        String selectedRegion = region.trim();
+        executeQuery(connection, "ALL COUNTRIES IN " + selectedRegion,
+                BASE_QUERY + " WHERE c.Region = ? ORDER BY c.Population DESC, c.Code ASC",
+                selectedRegion);
+    }
+
+    /** Issue #8: Top N countries in a selected continent, largest population first. */
+    public void displayTopNCountriesInContinent(Connection connection, String continent, int topN)
+            throws SQLException {
+        if (Objects.toString(continent, "").isBlank()) {
+            throw new IllegalArgumentException("Continent must not be blank");
+        }
+        if (topN <= 0) {
+            throw new IllegalArgumentException("Top N must be greater than zero");
+        }
+        String selectedContinent = continent.trim();
+        executeQuery(connection, "TOP " + topN + " COUNTRIES IN CONTINENT: " + selectedContinent,
+                BASE_QUERY + " WHERE c.Continent = ? ORDER BY c.Population DESC, c.Code ASC LIMIT ?",
+                selectedContinent, topN);
+    }
+
+    /** Issue #9: Top N countries in a selected region, largest population first. */
+    public void displayTopNCountriesInRegion(Connection connection, String region, int topN)
+            throws SQLException {
+        if (Objects.toString(region, "").isBlank()) {
+            throw new IllegalArgumentException("Region must not be blank");
+        }
+        if (topN <= 0) {
+            throw new IllegalArgumentException("Top N must be greater than zero");
+        }
+        String selectedRegion = region.trim();
+        executeQuery(connection, "TOP " + topN + " COUNTRIES IN REGION: " + selectedRegion,
+                BASE_QUERY + " WHERE c.Region = ? ORDER BY c.Population DESC, c.Code ASC LIMIT ?",
+                selectedRegion, topN);
+    }
+
+    /** Issue #7: Top N countries in the world, ordered by population descending. */
+    public void displayTopNCountriesInWorld(Connection connection, int topN)
+            throws SQLException {
+        if (topN <= 0) {
+            throw new IllegalArgumentException("Top N must be greater than zero");
+        }
+        executeQuery(connection, "TOP " + topN + " COUNTRIES IN THE WORLD",
+                BASE_QUERY + " ORDER BY c.Population DESC, c.Code ASC LIMIT ?",
+                topN);
+    }
+
+    /** Reusable query execution; user-supplied values must be passed as parameters. */
+    public static void executeQuery(Connection connection, String title, String sql,
+                                    Object... parameters) throws SQLException {
+        Objects.requireNonNull(connection, "Connection must not be null");
+
+        List<String[]> rows = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            for (int i = 0; i < parameters.length; i++) {
+                statement.setObject(i + 1, parameters[i]);
+            }
+
+            try (ResultSet result = statement.executeQuery()) {
+                while (result.next()) {
+                    rows.add(new String[]{
+                            result.getString("Code"),
+                            result.getString("Name"),
+                            result.getString("Continent"),
+                            result.getString("Region"),
+                            String.format(Locale.US, "%,d", result.getLong("Population")),
+                            result.getString("Capital")
+                    });
+                }
+            }
+        }
+        ReportDisplay.printTable(title, HEADERS, rows);
+    }
+}
