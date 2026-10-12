@@ -85,6 +85,17 @@ public class CountryReport {
                 selectedRegion, topN);
     }
 
+    /** Issue #7: Top N countries in the world, ordered by population descending. */
+    public void displayTopNCountriesInWorld(Connection connection, int topN)
+            throws SQLException {
+        if (topN <= 0) {
+            throw new IllegalArgumentException("Top N must be greater than zero");
+        }
+        executeQuery(connection, "TOP " + topN + " COUNTRIES IN THE WORLD",
+                BASE_QUERY + " ORDER BY c.Population DESC, c.Code ASC LIMIT ?",
+                topN);
+    }
+
     /** Reusable query execution; user-supplied values must be passed as parameters. */
     public static void executeQuery(Connection connection, String title, String sql,
                                     Object... parameters) throws SQLException {
