@@ -91,10 +91,10 @@ All members should read and agree to this document. Any changes must be discusse
 
 | No. | Member | Role | Agreement |
 |---|---|---|---|
-| 1 | Kaung Myat Lwin (Hiki) | Scrum Master | Agreed |
-| 2 | Hein Htoo Naing (Jester) | Product Owner | Agreed |
-| 3 | Htoo Aung Lin (Ali) | Developer 1 | Agreed |
-| 4 | Nyan Lin Htet (Cyon) | Developer 2 | Agreed |
-| 5 | Dana Aung (Rizzy) | Developer 3 | Agreed |
+| 1 | Kaung Myat Lwin | Scrum Master | Agreed |
+| 2 | Hein Htoo Naing | Product Owner | Agreed |
+| 3 | Htoo Aung Lin | Developer 1 | Agreed |
+| 4 | Nyan Lin Htet | Developer 2 | Agreed |
+| 5 | Dana Aung | Developer 3 | Agreed |
 | 6 | Thet Aung Hein | Developer 4 | Agreed |
 
