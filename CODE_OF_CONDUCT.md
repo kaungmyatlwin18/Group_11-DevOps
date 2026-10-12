@@ -14,10 +14,10 @@ This Code of Conduct sets out how Group 11 will work together on the Population 
 | Member | Role | Main responsibilities |
 |---|---|---|
 | Hein Htoo Naing | Product Owner | Prioritise the Product Backlog, maintain user stories and acceptance criteria, and review completed requirements. |
-| Kaung Myat Lwin (Hiki) | Scrum Master | Organise sprint meetings, monitor progress, support teammates, and help resolve blockers. |
-| Htoo Aung Lin (Ali) | Developer 1 | Implement, test, document, and review assigned development tasks. |
-| Nyan Lin Htet (Cyon) | Developer 2 | Implement, test, document, and review assigned development tasks. |
-| Dana Aung (Rizzy) | Developer 3 | Implement, test, document, and review assigned development tasks. |
+| Kaung Myat Lwin | Scrum Master | Organise sprint meetings, monitor progress, support teammates, and help resolve blockers. |
+| Htoo Aung Lin | Developer 1 | Implement, test, document, and review assigned development tasks. |
+| Nyan Lin Htet | Developer 2 | Implement, test, document, and review assigned development tasks. |
+| Dana Aung | Developer 3 | Implement, test, document, and review assigned development tasks. |
 | Thet Aung Hein | Developer 4 | Implement, test, document, and review assigned development tasks. |
 
 **All members** must participate in agreed activities, communicate their progress, help each other when possible, and take responsibility for their assigned work.
