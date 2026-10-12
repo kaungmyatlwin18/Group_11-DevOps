@@ -40,7 +40,8 @@
 
 ## 3. Use Case Diagram
 
-**[Insert screenshot of Group 11's use case diagram here]**
+<img width="548" height="632" alt="use-case-diagram" src="https://github.com/user-attachments/assets/2a540d11-d768-481a-bdfb-a5fedcde233a" />
+
 
 The use case diagram illustrates how a user interacts with the Population Reporting System to generate reports from the MySQL World database.
 
@@ -62,12 +63,12 @@ The six completed requirements cover country reporting features. The remaining 2
 
 | ID | Requirement                                | GitHub Issue | Met? | Output Screenshot |
 | -- | ------------------------------------------ | ------------ | ---- | ----------------- |
-| 1  | All countries in the world by population   | #2           | Yes  | Add screenshot 1  |
-| 2  | All countries in a continent by population | #4           | Yes  | Add screenshot 2  |
-| 3  | All countries in a region by population    | #6           | Yes  | Add screenshot 3  |
-| 4  | Top N countries in the world               | #7           | Yes  | Add screenshot 4  |
-| 5  | Top N countries in a continent             | #8           | Yes  | Add screenshot 5  |
-| 6  | Top N countries in a region                | #9           | Yes  | Add screenshot 6  |
+| 1  | All countries in the world by population   | #2           | Yes  | <img width="1448" height="796" alt="issue-02" src="https://github.com/user-attachments/assets/11a26ef7-d82f-4a62-bca7-fddb589a4aae" />|
+| 2  | All countries in a continent by population | #4           | Yes  | <img width="1096" height="760" alt="issue-04" src="https://github.com/user-attachments/assets/1441f53c-38d0-45b9-94e5-82bc24bd64fe" />|
+| 3  | All countries in a region by population    | #6           | Yes  | <img width="787" height="390" alt="issue-06" src="https://github.com/user-attachments/assets/b6bc45e4-cf2e-40e3-a337-5b69f744d03f" /> |
+| 4  | Top N countries in the world               | #7           | Yes  | <img width="957" height="312" alt="issue-07" src="https://github.com/user-attachments/assets/626f8943-ccb4-47bc-95d5-aa35c032373a" /> |
+| 5  | Top N countries in a continent             | #8           | Yes  | <img width="896" height="247" alt="issue-08" src="https://github.com/user-attachments/assets/46d843d6-6d04-4711-be33-91599c4f07fe" /> |
+| 6  | Top N countries in a region                | #9           | Yes  | <img width="847" height="255" alt="issue-09" src="https://github.com/user-attachments/assets/943daaff-1338-4144-a597-ad8fcf9350c1" /> |
 
 ### 4.2 City Reports
 
