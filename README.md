@@ -182,3 +182,14 @@ Group 11 has established the initial DevOps development workflow and implemented
 The completed features demonstrate successful database integration, population-based sorting, configurable Top N reporting, and automated testing.
 
 Further development will focus on completing the remaining city, capital city, population and language reporting requirements.
+
+## 8. Individual Contribution Percentages
+| Matric            | Code Review 1                   | Code Review 2                                         |
+| ----------------- | ------------------------------- | ----------------------------------------------------- |
+| 40841053          | 17                              | -                                                     |
+| 40841054          | 17                              | -                                                     |
+| 40841060          | 17                              | -                                                     |
+| 40841062          | 17                              | -                                                     |
+| 40841068          | 15                              | -                                                     |
+| 40840490          | 17                              | -                                                     |
+| Total             | 100                             | -                                                     |
