@@ -35,4 +35,4 @@ These six documents describe the six individual Country Report features currentl
 
 Place verified screenshots of each report's real console output in `docs/screenshots/`, then link those screenshots in `README.md` against each of the six requirements. A GitHub issue marked Done is not, by itself, proof that its functionality meets the requirement.
 
-**Release:** Use the name of the actual GitHub release after it has been created; this documentation does not assume a release version.
+**Release:** 1.0
