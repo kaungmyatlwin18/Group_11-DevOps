@@ -109,4 +109,77 @@ public class CitiesByDistrictReportTest {
             assertFalse(output.contains("Portland"));
         }
     }
+
+
+    @Test
+    void unknownDistrictReturnsEmptyList() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            List<CityReport.CityRow> cities =
+                    new CityReport().findCitiesInDistrict(connection, "Atlantis");
+
+            assertTrue(cities.isEmpty());
+        }
+    }
+
+    @Test
+    void trimsWhitespaceFromDistrictFilter() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            List<CityReport.CityRow> cities =
+                    new CityReport().findCitiesInDistrict(connection, "  California  ");
+
+            assertEquals(3, cities.size());
+            assertEquals("Los Angeles", cities.getFirst().name());
+        }
+    }
+
+    @Test
+    void nullAndBlankDistrictsAreRejected() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            CityReport report = new CityReport();
+
+            assertThrows(IllegalArgumentException.class,
+                    () -> report.findCitiesInDistrict(connection, null));
+            assertThrows(IllegalArgumentException.class,
+                    () -> report.findCitiesInDistrict(connection, ""));
+            assertThrows(IllegalArgumentException.class,
+                    () -> report.findCitiesInDistrict(connection, " \t "));
+        }
+    }
+
+    @Test
+    void nullDatabaseConnectionIsRejected() {
+        assertThrows(NullPointerException.class,
+                () -> new CityReport().findCitiesInDistrict(null, "California"));
+    }
+
+    @Test
+    void unknownDistrictDisplaysNoResultsMessage() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            PrintStream original = System.out;
+
+            try (PrintStream capture =
+                         new PrintStream(bytes, true, StandardCharsets.UTF_8)) {
+                System.setOut(capture);
+                new CitiesByDistrictReport().display(connection, "Atlantis");
+            } finally {
+                System.setOut(original);
+            }
+
+            String output = bytes.toString(StandardCharsets.UTF_8);
+            assertTrue(output.contains("Cities in district: Atlantis"));
+            assertTrue(output.contains("No results found."));
+            assertFalse(output.contains("Los Angeles"));
+        }
+    }
+
+    @Test
+    void districtFilterIsHandledAsSqlParameter() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            List<CityReport.CityRow> cities = new CityReport()
+                    .findCitiesInDistrict(connection, "California' OR '1'='1");
+
+            assertTrue(cities.isEmpty(), "The district filter must not change the SQL query");
+        }
+    }
 }
