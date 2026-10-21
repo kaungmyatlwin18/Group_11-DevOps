@@ -118,4 +118,92 @@ public class CitiesByCountryReportTest {
             assertFalse(output.contains("Bangkok"));
         }
     }
+
+    @Test
+    void rejectsNullCountry() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            assertThrows(IllegalArgumentException.class,
+                    () -> new CityReport().findCitiesInCountry(connection, null));
+        }
+    }
+
+    @Test
+    void rejectsBlankOrWhitespaceOnlyCountry() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            for (String country : List.of("", "   ", "\t\n")) {
+                assertThrows(IllegalArgumentException.class,
+                        () -> new CityReport().findCitiesInCountry(connection, country),
+                        "Should reject blank country: [" + country + "]");
+            }
+        }
+    }
+
+    @Test
+    void rejectsNullDatabaseConnection() {
+        assertThrows(NullPointerException.class,
+                () -> new CityReport().findCitiesInCountry(null, "Myanmar"));
+    }
+
+    @Test
+    void returnsNoCitiesForUnknownCountry() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            List<CityReport.CityRow> cities =
+                    new CityReport().findCitiesInCountry(connection, "Unknown Country");
+
+            assertNotNull(cities);
+            assertTrue(cities.isEmpty());
+        }
+    }
+
+    @Test
+    void trimsWhitespaceAroundSelectedCountry() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            List<CityReport.CityRow> cities =
+                    new CityReport().findCitiesInCountry(connection, "  Myanmar  ");
+
+            assertEquals(List.of("Rangoon", "Mandalay", "Moulmein"),
+                    cities.stream().map(CityReport.CityRow::name).toList());
+        }
+    }
+
+    @Test
+    void propagatesDatabaseErrorForClosedConnection() throws Exception {
+        Connection connection = createTestDatabase();
+        connection.close();
+
+        assertThrows(SQLException.class,
+                () -> new CityReport().findCitiesInCountry(connection, "Myanmar"));
+    }
+
+    @Test
+    void breaksPopulationTiesByCityNameThenId() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate("""
+                        INSERT INTO city (ID, Name, CountryCode, District, Population) VALUES
+                        (7, 'Zulu', 'MMR', 'Extra', 885300),
+                        (8, 'Alpha', 'MMR', 'Extra', 885300),
+                        (9, 'Twin', 'MMR', 'First', 50000),
+                        (10, 'Twin', 'MMR', 'Second', 50000)
+                        """);
+            }
+
+            List<CityReport.CityRow> cities =
+                    new CityReport().findCitiesInCountry(connection, "Myanmar");
+
+            // Same population: city name is the secondary sort field.
+            assertEquals(List.of("Alpha", "Mandalay", "Zulu"),
+                    cities.stream()
+                            .filter(city -> city.population() == 885300)
+                            .map(CityReport.CityRow::name)
+                            .toList());
+
+            // Same name and population: city ID determines the order.
+            assertEquals(List.of("First", "Second"),
+                    cities.stream()
+                            .filter(city -> city.name().equals("Twin"))
+                            .map(CityReport.CityRow::district)
+                            .toList());
+        }
+    }
 }
