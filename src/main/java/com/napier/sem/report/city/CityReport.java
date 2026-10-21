@@ -131,4 +131,52 @@ public class CityReport {
         return cities;
     }
 
+
+    /**
+     * Retrieves all cities in the selected country ordered by population.
+     * The country is matched by its full name in the country table.
+     *
+     * @param connection an active database connection
+     * @param country    the name of the country to search for
+     * @return cities belonging to the selected country in population order
+     * @throws SQLException if the database query fails
+     * @throws IllegalArgumentException if the country is null or blank
+     * @throws NullPointerException if the connection is null
+     */
+    public List<CityRow> findCitiesInCountry(
+            Connection connection, String country) throws SQLException {
+
+        Objects.requireNonNull(connection, "Connection must not be null");
+        if (country == null || country.isBlank()) {
+            throw new IllegalArgumentException("Country must not be blank");
+        }
+
+        String sql = """
+                SELECT ci.Name AS Name,
+                       co.Name AS Country,
+                       ci.District AS District,
+                       ci.Population AS Population
+                FROM city ci
+                JOIN country co ON ci.CountryCode = co.Code
+                WHERE co.Name = ?
+                ORDER BY ci.Population DESC, ci.Name ASC, ci.ID ASC
+                """;
+
+        List<CityRow> cities = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, country.trim());
+
+            try (ResultSet result = statement.executeQuery()) {
+                while (result.next()) {
+                    cities.add(new CityRow(
+                            result.getString("Name"),
+                            result.getString("Country"),
+                            result.getString("District"),
+                            result.getLong("Population")
+                    ));
+                }
+            }
+        }
+        return cities;
+    }
 }
