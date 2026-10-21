@@ -1,5 +1,6 @@
 package com.napier.sem;
 
+import com.napier.sem.report.city.CitiesByCountryReport;
 import com.napier.sem.report.city.CitiesByDistrictReport;
 import com.napier.sem.report.city.CitiesByRegionReport;
 import com.napier.sem.report.country.AllCountriesReport;
@@ -27,6 +28,7 @@ public final class AutoDisplay {
     private static final String DEFAULT_REGION = "Eastern Asia";
     private static final int DEFAULT_TOP_N = 3;
     private static final String DEFAULT_DISTRICT = "California";
+    private static final String DEFAULT_CITY_COUNTRY = "Myanmar";
 
     /**
      * User-configured N for Issue #7. A JVM property takes precedence over the
@@ -58,6 +60,17 @@ public final class AutoDisplay {
     private static String cityRegion() {
         String region = System.getProperty("city.region");
         return region == null || region.isBlank() ? DEFAULT_REGION : region.trim();
+    }
+
+    /**
+     * Selects a city country through the optional -Dcity.country JVM property.
+     * Uses Myanmar for the automatic demonstration if no country is supplied.
+     */
+    private static String cityCountry() {
+        String country = System.getProperty("city.country");
+        return country == null || country.isBlank()
+                ? DEFAULT_CITY_COUNTRY
+                : country.trim();
     }
 
     private AutoDisplay() {
@@ -118,6 +131,9 @@ public final class AutoDisplay {
 
             System.out.println("\n===== ISSUE #12 =====");
             new CitiesByRegionReport().display(connection, cityRegion());
+
+            System.out.println("\n===== ISSUE #13 =====");
+            new CitiesByCountryReport().display(connection, cityCountry());
         }
 
         System.out.println("\n========== AVAILABLE REPORTS COMPLETED ==========");
