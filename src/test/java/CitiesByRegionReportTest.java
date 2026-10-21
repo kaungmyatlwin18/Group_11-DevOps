@@ -117,4 +117,92 @@ public class CitiesByRegionReportTest {
             assertFalse(output.contains("New York"));
         }
     }
+
+    @Test
+    void rejectsNullRegion() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            assertThrows(IllegalArgumentException.class,
+                    () -> new CityReport().findCitiesInRegion(connection, null));
+        }
+    }
+
+    @Test
+    void rejectsBlankOrWhitespaceOnlyRegion() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            for (String region : List.of("", "   ", "\t\n")) {
+                assertThrows(IllegalArgumentException.class,
+                        () -> new CityReport().findCitiesInRegion(connection, region),
+                        "Should reject blank region: [" + region + "]");
+            }
+        }
+    }
+
+    @Test
+    void rejectsNullDatabaseConnection() {
+        assertThrows(NullPointerException.class,
+                () -> new CityReport().findCitiesInRegion(null, "Eastern Asia"));
+    }
+
+    @Test
+    void returnsNoCitiesForUnknownRegion() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            List<CityReport.CityRow> cities =
+                    new CityReport().findCitiesInRegion(connection, "Unknown Region");
+
+            assertNotNull(cities);
+            assertTrue(cities.isEmpty());
+        }
+    }
+
+    @Test
+    void trimsWhitespaceAroundSelectedRegion() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            List<CityReport.CityRow> cities =
+                    new CityReport().findCitiesInRegion(connection, "  Eastern Asia  ");
+
+            assertEquals(List.of("Seoul", "Shanghai", "Tokyo", "Osaka"),
+                    cities.stream().map(CityReport.CityRow::name).toList());
+        }
+    }
+
+    @Test
+    void propagatesDatabaseErrorForClosedConnection() throws Exception {
+        Connection connection = createTestDatabase();
+        connection.close();
+
+        assertThrows(SQLException.class,
+                () -> new CityReport().findCitiesInRegion(connection, "Eastern Asia"));
+    }
+
+    @Test
+    void breaksPopulationTiesByCityNameThenId() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate("""
+                        INSERT INTO city (ID, Name, CountryCode, District, Population) VALUES
+                        (7, 'Zulu', 'CHN', 'Extra', 8000000),
+                        (8, 'Alpha', 'CHN', 'Extra', 8000000),
+                        (9, 'Twin', 'CHN', 'First', 500000),
+                        (10, 'Twin', 'CHN', 'Second', 500000)
+                        """);
+            }
+
+            List<CityReport.CityRow> cities =
+                    new CityReport().findCitiesInRegion(connection, "Eastern Asia");
+
+            // Three cities share 8 million people; names break the tie.
+            assertEquals(List.of("Alpha", "Tokyo", "Zulu"),
+                    cities.stream()
+                            .filter(city -> city.population() == 8000000)
+                            .map(CityReport.CityRow::name)
+                            .toList());
+
+            // Same name and population: the lower city ID comes first.
+            assertEquals(List.of("First", "Second"),
+                    cities.stream()
+                            .filter(city -> city.name().equals("Twin"))
+                            .map(CityReport.CityRow::district)
+                            .toList());
+        }
+    }
 }
