@@ -10,17 +10,17 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Provides database operations for city population reports.
+ * Provides database access for city population reports.
  */
 public class CityReport {
 
     /**
-     * Represents a city and its population details.
+     * Represents a city record returned by a population report.
      *
      * @param name       name of the city
-     * @param country    country containing the city
-     * @param district   district containing the city
-     * @param population population of the city
+     * @param country    country where the city is located
+     * @param district   district where the city is located
+     * @param population total population of the city
      */
     public record CityRow(
             String name,
@@ -31,15 +31,16 @@ public class CityReport {
     }
 
     /**
-     * Retrieves cities in the specified district, ordered by population
-     * in descending order.
+     * Retrieves cities within the specified district,
+     * ordered by population in descending order.
      *
-     * District names may exist in multiple countries.
+     * <p>District names may exist in multiple countries,
+     * so the results can include cities from different countries.</p>
      *
-     * @param connection active database connection
-     * @param district   district to search for
-     * @return matching cities, or an empty list if none are found
-     * @throws SQLException if a database operation fails
+     * @param connection an active database connection
+     * @param district   the district name to search for
+     * @return a list of matching cities ordered by population
+     * @throws SQLException if the database query fails
      * @throws IllegalArgumentException if the district is null or blank
      * @throws NullPointerException if the connection is null
      */
