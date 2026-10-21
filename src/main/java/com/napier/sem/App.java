@@ -3,12 +3,13 @@ package com.napier.sem;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-/** IntelliJ entry point: automatically displays completed reports without keyboard input. */
+/**
+ * Application entry point for the Group 11 population reports.
+ * All available reports are launched through AutoDisplay.
+ */
 public class App {
 
     public static void main(String[] args) {
-        // Requires the official project's DatabaseConnection.connect() method.
-        // If App.java already exists, MERGE only the AutoDisplay call instead.
         DatabaseConnection database = new DatabaseConnection();
 
         try (Connection connection = database.connect()) {
