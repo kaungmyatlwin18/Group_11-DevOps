@@ -83,4 +83,52 @@ public class CityReport {
 
         return cities;
     }
+    /**
+     * Retrieves cities in a geographic region, sorted by population.
+     * The region belongs to the country table rather than the city table.
+     *
+     * @param connection an active database connection
+     * @param region     the region to search for
+     * @return matching cities in descending population order
+     * @throws SQLException if the database query fails
+     * @throws IllegalArgumentException if the region is null or blank
+     * @throws NullPointerException if the connection is null
+     */
+    public List<CityRow> findCitiesInRegion(
+            Connection connection, String region) throws SQLException {
+
+        Objects.requireNonNull(connection, "Connection must not be null");
+        if (region == null || region.isBlank()) {
+            throw new IllegalArgumentException("Region must not be blank");
+        }
+
+        String sql = """
+                SELECT ci.Name AS Name,
+                       co.Name AS Country,
+                       ci.District AS District,
+                       ci.Population AS Population
+                FROM city ci
+                JOIN country co ON ci.CountryCode = co.Code
+                WHERE co.Region = ?
+                ORDER BY ci.Population DESC, ci.Name ASC, ci.ID ASC
+                """;
+
+        List<CityRow> cities = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, region.trim());
+
+            try (ResultSet result = statement.executeQuery()) {
+                while (result.next()) {
+                    cities.add(new CityRow(
+                            result.getString("Name"),
+                            result.getString("Country"),
+                            result.getString("District"),
+                            result.getLong("Population")
+                    ));
+                }
+            }
+        }
+        return cities;
+    }
+
 }
