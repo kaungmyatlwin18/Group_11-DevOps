@@ -1,6 +1,7 @@
 package com.napier.sem;
 
 import com.napier.sem.report.city.CitiesByDistrictReport;
+import com.napier.sem.report.city.CitiesByRegionReport;
 import com.napier.sem.report.country.AllCountriesReport;
 import com.napier.sem.report.country.CountriesByContinentReport;
 import com.napier.sem.report.country.CountriesByRegionReport;
@@ -50,11 +51,20 @@ public final class AutoDisplay {
         }
     }
 
+    /**
+     * Selects a city region through the optional -Dcity.region JVM property.
+     * Uses the existing default region when no value is supplied.
+     */
+    private static String cityRegion() {
+        String region = System.getProperty("city.region");
+        return region == null || region.isBlank() ? DEFAULT_REGION : region.trim();
+    }
+
     private AutoDisplay() {
     }
 
     /**
-     * Checks for the full city table schema before running a district report.
+     * Checks for the full city table schema before running city reports.
      * Existing country-only tests use a smaller city table containing capitals.
      * Querying metadata without fetching rows avoids changing those test fixtures.
      */
@@ -98,13 +108,16 @@ public final class AutoDisplay {
         System.out.println("\n===== ISSUE #7 =====");
         new TopNCountriesInWorldReport().display(connection, worldTopN());
 
-        // Display Issue #14 only when the city table has all required columns.
-        // This leaves the existing H2 country-report tests unchanged.
+        // Existing country-only tests use a minimal H2 city table.
+        // Run city reports when the complete World database schema is available.
         if (hasDistrictCityColumns(connection)) {
             System.out.println("\n========== GROUP 11 CITY REPORTS ==========");
 
             System.out.println("\n===== ISSUE #14 =====");
             new CitiesByDistrictReport().display(connection, DEFAULT_DISTRICT);
+
+            System.out.println("\n===== ISSUE #12 =====");
+            new CitiesByRegionReport().display(connection, cityRegion());
         }
 
         System.out.println("\n========== AVAILABLE REPORTS COMPLETED ==========");
