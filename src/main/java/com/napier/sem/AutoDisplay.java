@@ -1,5 +1,6 @@
 package com.napier.sem;
 
+import com.napier.sem.report.city.AllCitiesPopulationReport;
 import com.napier.sem.report.city.CitiesByCountryReport;
 import com.napier.sem.report.city.CitiesByDistrictReport;
 import com.napier.sem.report.city.CitiesByRegionReport;
@@ -134,6 +135,9 @@ public final class AutoDisplay {
 
             System.out.println("\n===== ISSUE #13 =====");
             new CitiesByCountryReport().display(connection, cityCountry());
+
+            System.out.println("\n===== ISSUE #10 =====");
+            new AllCitiesPopulationReport().display(connection);
         }
 
         System.out.println("\n========== AVAILABLE REPORTS COMPLETED ==========");
