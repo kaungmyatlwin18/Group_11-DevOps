@@ -8,6 +8,7 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -117,4 +118,118 @@ public class AllCitiesPopulationReportTest {
                     "Largest city should print before the second largest");
         }
     }
+
+@Test
+void rejectsNullConnection() {
+    assertThrows(NullPointerException.class,
+            () -> new AllCitiesPopulationQuery().findAllCities(null));
+}
+
+@Test
+void rejectsClosedConnection() throws Exception {
+    Connection connection = createTestDatabase();
+    connection.close();
+
+    assertThrows(SQLException.class,
+            () -> new AllCitiesPopulationQuery().findAllCities(connection));
+}
+
+@Test
+void returnsEmptyListWhenThereAreNoCities() throws Exception {
+    try (Connection connection = createTestDatabase();
+         Statement statement = connection.createStatement()) {
+        statement.executeUpdate("DELETE FROM city");
+
+        List<CityReport.CityRow> cities =
+                new AllCitiesPopulationQuery().findAllCities(connection);
+        assertTrue(cities.isEmpty(), "An empty city table should return no rows");
+    }
+}
+
+@Test
+void sortsEqualPopulationsAlphabeticallyByCityName() throws Exception {
+    try (Connection connection = createTestDatabase();
+         Statement statement = connection.createStatement()) {
+        statement.executeUpdate("""
+                INSERT INTO city (ID, Name, CountryCode, District, Population) VALUES
+                (7, 'Zulu',  'JPN', 'Tokyo-to', 500000),
+                (8, 'Alpha', 'MMR', 'Mandalay', 500000),
+                (9, 'Beta',  'CHN', 'Shanghai', 500000)
+                """);
+
+        List<String> tiedNames = new AllCitiesPopulationQuery()
+                .findAllCities(connection).stream()
+                .filter(city -> city.population() == 500000L)
+                .map(CityReport.CityRow::name)
+                .toList();
+
+        assertEquals(List.of("Alpha", "Beta", "Zulu"), tiedNames,
+                "Population ties should be ordered by city name");
+    }
+}
+
+@Test
+void includesZeroPopulationCitiesAtTheEnd() throws Exception {
+    try (Connection connection = createTestDatabase();
+         Statement statement = connection.createStatement()) {
+        statement.executeUpdate("""
+                INSERT INTO city (ID, Name, CountryCode, District, Population)
+                VALUES (10, 'Zero City', 'MMR', 'Mandalay', 0)
+                """);
+
+        List<CityReport.CityRow> cities =
+                new AllCitiesPopulationQuery().findAllCities(connection);
+        CityReport.CityRow last = cities.get(cities.size() - 1);
+
+        assertEquals(7, cities.size());
+        assertEquals("Zero City", last.name());
+        assertEquals(0L, last.population());
+    }
+}
+
+@Test
+void keepsCitiesWithNullDistrict() throws Exception {
+    try (Connection connection = createTestDatabase();
+         Statement statement = connection.createStatement()) {
+        statement.executeUpdate("""
+                INSERT INTO city (ID, Name, CountryCode, District, Population)
+                VALUES (11, 'No District City', 'JPN', NULL, 125000)
+                """);
+
+        CityReport.CityRow city = new AllCitiesPopulationQuery()
+                .findAllCities(connection).stream()
+                .filter(row -> row.name().equals("No District City"))
+                .findFirst()
+                .orElseThrow();
+
+        assertEquals("Japan", city.country());
+        assertNull(city.district(), "The district should not be invented");
+        assertEquals(125000L, city.population());
+    }
+}
+
+@Test
+void doesNotLimitResultsToTopOneHundredCities() throws Exception {
+    try (Connection connection = createTestDatabase();
+         PreparedStatement insert = connection.prepareStatement("""
+                 INSERT INTO city (ID, Name, CountryCode, District, Population)
+                 VALUES (?, ?, 'JPN', 'Osaka', ?)
+                 """)) {
+        for (int i = 0; i < 120; i++) {
+            insert.setInt(1, 1000 + i);
+            insert.setString(2, "Additional City " + i);
+            insert.setLong(3, 100L + i);
+            insert.addBatch();
+        }
+        insert.executeBatch();
+
+        List<CityReport.CityRow> cities =
+                new AllCitiesPopulationQuery().findAllCities(connection);
+        assertEquals(126, cities.size(),
+                "All cities must be returned, not just the top 100");
+        assertEquals("Seoul", cities.get(0).name());
+        assertEquals(100L, cities.get(cities.size() - 1).population());
+    }
+}
+
 }
