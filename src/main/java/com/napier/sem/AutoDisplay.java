@@ -7,6 +7,7 @@ import com.napier.sem.report.city.CitiesByDistrictReport;
 import com.napier.sem.report.city.CitiesByRegionReport;
 import com.napier.sem.report.city.TopNCitiesInWorldReport;
 import com.napier.sem.report.city.TopNCitiesInContinentReport;
+import com.napier.sem.report.city.TopNCitiesInRegionReport;
 import com.napier.sem.report.country.AllCountriesReport;
 import com.napier.sem.report.country.CountriesByContinentReport;
 import com.napier.sem.report.country.CountriesByRegionReport;
@@ -159,6 +160,13 @@ public final class AutoDisplay {
                     connection,
                     TopNCitiesInContinentReport.configuredContinent(),
                     TopNCitiesInContinentReport.configuredTopN()
+            );
+
+            System.out.println("\n===== ISSUE #17 =====");
+            new TopNCitiesInRegionReport().display(
+                    connection,
+                    TopNCitiesInRegionReport.configuredRegion(),
+                    TopNCitiesInRegionReport.configuredTopN()
             );
         }
 
