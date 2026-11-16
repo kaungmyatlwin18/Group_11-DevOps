@@ -1,5 +1,6 @@
 package com.napier.sem;
 
+import com.napier.sem.report.capital.AllCapitalCitiesReport;
 import com.napier.sem.report.city.AllCitiesPopulationReport;
 import com.napier.sem.report.city.CitiesByContinentReport;
 import com.napier.sem.report.city.CitiesByCountryReport;
@@ -184,6 +185,11 @@ public final class AutoDisplay {
                     TopNCitiesInDistrictReport.configuredDistrict(),
                     TopNCitiesInDistrictReport.configuredTopN()
             );
+
+            System.out.println("\n========== GROUP 11 CAPITAL CITY REPORTS ==========");
+
+            System.out.println("\n===== ISSUE #20 =====");
+            new AllCapitalCitiesReport().display(connection);
         }
 
         System.out.println("\n========== AVAILABLE REPORTS COMPLETED ==========");
