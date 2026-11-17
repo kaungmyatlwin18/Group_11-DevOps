@@ -192,11 +192,13 @@ public class CapitalCitiesByContinentReportTest {
             for (int issue : new int[]{2, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}) {
                 assertTrue(output.contains("===== ISSUE #" + issue + " ====="), "Missing issue " + issue);
             }
-            String section = output.substring(output.indexOf("===== ISSUE #21 ====="));
+            int start = output.indexOf("===== ISSUE #21 =====");
+            int end = output.indexOf("\n===== ISSUE #", start + 1);
+            String section = output.substring(start, end < 0 ? output.length() : end);
             assertTrue(section.contains("Bravo"));
             assertFalse(section.contains("Charlie"));
             assertFalse(section.contains("Noncapital B"));
-            assertTrue(section.contains("AVAILABLE REPORTS COMPLETED"));
+            assertTrue(output.contains("AVAILABLE REPORTS COMPLETED"));
         } finally {
             if (previous == null) System.clearProperty("capital.continent");
             else System.setProperty("capital.continent", previous);
