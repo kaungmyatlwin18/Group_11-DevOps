@@ -2,6 +2,7 @@ package com.napier.sem;
 
 import com.napier.sem.report.population.ContinentPopulationReport;
 import com.napier.sem.report.population.RegionPopulationReport;
+import com.napier.sem.report.population.CountryPopulationReport;
 
 import com.napier.sem.report.capital.AllCapitalCitiesReport;
 import com.napier.sem.report.capital.CapitalCitiesByContinentReport;
@@ -218,6 +219,9 @@ public final class AutoDisplay {
 
             System.out.println("\n===== ISSUE #27 =====");
             new RegionPopulationReport().display(connection);
+
+            System.out.println("\n===== ISSUE #28 =====");
+            new CountryPopulationReport().display(connection);
         }
 
         System.out.println("\n========== AVAILABLE REPORTS COMPLETED ==========");
