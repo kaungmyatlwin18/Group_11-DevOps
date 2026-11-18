@@ -1,5 +1,7 @@
 package com.napier.sem;
 
+import com.napier.sem.report.population.ContinentPopulationReport;
+
 import com.napier.sem.report.capital.AllCapitalCitiesReport;
 import com.napier.sem.report.capital.CapitalCitiesByContinentReport;
 import com.napier.sem.report.capital.CapitalCitiesByRegionReport;
@@ -205,6 +207,13 @@ public final class AutoDisplay {
             System.out.println("\n===== ISSUE #23 =====");
             new TopNCapitalCitiesInWorldReport().display(
                     connection, TopNCapitalCitiesInWorldReport.configuredTopN());
+        }
+
+        // The reduced city schema used by older country-only tests has no population column.
+        if (hasDistrictCityColumns(connection)) {
+            System.out.println("\n========== GROUP 11 POPULATION REPORTS ==========");
+            System.out.println("\n===== ISSUE #26 =====");
+            new ContinentPopulationReport().display(connection);
         }
 
         System.out.println("\n========== AVAILABLE REPORTS COMPLETED ==========");
