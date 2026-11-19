@@ -193,3 +193,57 @@ Further development will focus on completing the remaining city, capital city, p
 | 40841068          | 15                              | -                                                     |
 | 40840490          | 17                              | -                                                     |
 | Total             | 100                             | -                                                     |
+
+## 9. Automated Test Coverage (JaCoCo)
+
+JaCoCo measures the Java production code exercised by the automated tests. The
+coverage baseline is based on features implemented at the time of each run.
+No application-class exclusions or minimum coverage percentage are configured.
+
+### Generate the report locally (Windows PowerShell)
+
+From the repository root, with JDK 25 and Maven installed:
+
+```powershell
+Remove-Item Env:DB_PASSWORD -ErrorAction SilentlyContinue
+mvn clean verify
+```
+
+The command runs the JUnit suite, including H2 in-memory report tests, and
+creates the coverage report during Maven's `verify` phase. With `DB_PASSWORD`
+unset, the three real MySQL integration tests are skipped; those tests run
+separately in the existing Group 11 Integration Testing workflow. MySQL and
+Docker are not required for this coverage run.
+
+Open the HTML report:
+
+```powershell
+Start-Process (Resolve-Path "target/site/jacoco/index.html")
+```
+
+The full report directory is `target/site/jacoco/`, including `index.html`,
+`jacoco.xml` and `jacoco.csv`. Keep the whole directory together to preserve
+links and styles. Generated reports belong in the build output, not in Git.
+
+### Review measured coverage
+
+- Line coverage measures which executable source lines were exercised.
+- Branch coverage measures which outcomes of conditional decisions were exercised.
+- Open the HTML report and inspect low-coverage packages, classes and methods.
+  Use highlighted missed lines and branches to identify useful additional tests.
+- Record the actual line and branch percentages and any gaps in the pull request.
+  Passing tests do not by themselves guarantee high code coverage.
+- Extend tests and measure coverage again as remaining report features are merged.
+
+### Download the report from GitHub Actions
+
+Open the repository's **Actions** tab and select **Group 11 Code Coverage**.
+Open a successful run for the relevant branch or pull request. The job summary
+shows measured line and branch coverage. Download the
+`group11-jacoco-coverage` artifact, extract the ZIP and open `index.html` in
+its extracted directory. The workflow runs on pushes to `develop` and
+`test/code-coverage`, and on pull requests targeting `develop`.
+
+The existing independent unit testing, MySQL integration testing, and Maven
+and Docker CI workflows remain separate. Coverage reporting does not replace
+those checks.
