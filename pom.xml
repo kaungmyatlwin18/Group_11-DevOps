@@ -58,6 +58,28 @@
                 <version>3.6.0</version>
             </plugin>
 
+            <!-- Measure code coverage with JaCoCo (Java 25 compatible) -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.16</version>
+                <executions>
+                    <execution>
+                        <id>prepare-coverage-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generate-coverage-report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Package Application into JAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
