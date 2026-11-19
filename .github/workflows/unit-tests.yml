@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - develop
-      - test/issue-76-unit-tests
+      - test/unit-testing
   pull_request:
     branches:
       - develop
