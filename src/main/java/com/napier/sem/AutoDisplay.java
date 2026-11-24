@@ -8,6 +8,7 @@ import com.napier.sem.report.capital.AllCapitalCitiesReport;
 import com.napier.sem.report.capital.CapitalCitiesByContinentReport;
 import com.napier.sem.report.capital.CapitalCitiesByRegionReport;
 import com.napier.sem.report.capital.TopNCapitalCitiesInWorldReport;
+import com.napier.sem.report.capital.TopNCapitalCitiesInContinentReport;
 import com.napier.sem.report.city.AllCitiesPopulationReport;
 import com.napier.sem.report.city.CitiesByContinentReport;
 import com.napier.sem.report.city.CitiesByCountryReport;
@@ -209,6 +210,12 @@ public final class AutoDisplay {
             System.out.println("\n===== ISSUE #23 =====");
             new TopNCapitalCitiesInWorldReport().display(
                     connection, TopNCapitalCitiesInWorldReport.configuredTopN());
+
+            System.out.println("\n===== ISSUE #24 =====");
+            new TopNCapitalCitiesInContinentReport().display(
+                    connection,
+                    CapitalCitiesByContinentReport.configuredContinent(),
+                    TopNCapitalCitiesInContinentReport.configuredTopN());
         }
 
         // The reduced city schema used by older country-only tests has no population column.
