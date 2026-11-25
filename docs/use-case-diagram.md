@@ -33,6 +33,6 @@ The overview diagram groups the system's reporting functionality into broader re
 
 ## Evidence for Review
 
-Console-output screenshots for these six reports are stored in `docs/screenshots/` and linked to their corresponding requirements in `README.md`. These screenshots provide evidence of the implemented report functionality. A GitHub issue marked Done alone does not demonstrate that a requirement works.
+Console-output screenshots for these six reports are stored in `docs/screenshots/`. The README includes screenshot evidence for the corresponding requirements. These screenshots provide evidence of the implemented report functionality. A GitHub issue marked Done alone does not demonstrate that a requirement works.
 
 **Release:** 1.0
