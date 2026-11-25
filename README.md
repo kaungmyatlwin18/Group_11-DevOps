@@ -5,245 +5,214 @@
 * License [![LICENSE](https://img.shields.io/github/license/kaungmyatlwin18/Group_11-DevOps.svg?style=flat-square)](https://github.com/kaungmyatlwin18/Group_11-DevOps/blob/master/LICENSE)
 * Release [![Releases](https://img.shields.io/github/release/kaungmyatlwin18/Group_11-DevOps/all.svg?style=flat-square)](https://github.com/kaungmyatlwin18/Group_11-DevOps/releases)
 
+* Unit Testing [![Unit Testing](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/unit-tests.yml/badge.svg?branch=develop)](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/unit-tests.yml)
+* Integration Testing [![Integration Testing](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/integration-tests.yml/badge.svg?branch=develop)](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/integration-tests.yml)
+* Code Coverage Workflow [![Code Coverage Workflow](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/code-coverage.yml/badge.svg?branch=develop)](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/code-coverage.yml)
+
 # Group 11 — DevOps Project Report
 
-**Module:** SET09803 DevOps  
-**Project:** Population Reporting System  
-**Code Review:** 1  
-**Date:** 14 October 2026
+**Module:** SET09803 DevOps
+**Project:** Population Reporting System
+**Code Review:** 2
+**Evidence snapshot:** 25 November 2026 (`develop`, `64d6faf`)
 
 ## 1. Team Members
 
-| Role          | Member          |
-| ------------- | --------------- |
-| Product Owner | Hein Htoo Naing|
-| Scrum Master  | Kaung Myat Lwin |
-| Developer 1   | Htoo Aung Lin   |
-| Developer 2   | Nyan Lin Htet   |
-| Developer 3   | Dana Aung       |
-| Developer 4   | Thet Aung Hein  |
+| Role | Member |
+|---|---|
+| Product Owner | Hein Htoo Naing |
+| Scrum Master | Kaung Myat Lwin |
+| Developer 1 | Htoo Aung Lin |
+| Developer 2 | Nyan Lin Htet |
+| Developer 3 | Dana Aung |
+| Developer 4 | Thet Aung Hein |
 
 ## 2. Technologies Used
 
-| Technology        | Version / Details               | Purpose                                               |
-| ----------------- | ------------------------------- | ----------------------------------------------------- |
-| Java              | JDK 25 (Eclipse Temurin)        | Application development                               |
-| Apache Maven      | Version to confirm              | Building the Java application and running tests       |
-| MySQL             | 8.4                             | World population database                             |
-| MySQL Connector/J | JDBC driver                     | Connecting Java to MySQL                              |
-| Docker            | Docker Desktop / Docker Compose | Running and configuring containers                    |
-| Git               | Version control                 | Managing source code changes                          |
-| GitHub            | Repository hosting              | Issues, branches, pull requests and collaboration     |
-| GitHub Actions    | CI workflow                     | Automated Maven builds, tests and Docker verification |
-| JUnit             | Version to confirm              | Automated testing                                     |
-| IntelliJ IDEA     | 2026.2.2                        | Java development and debugging                        |
+| Technology | Version / Details | Purpose |
+|---|---|---|
+| Java | JDK 25 (Eclipse Temurin) | Application development |
+| Apache Maven | Maven 3.x | Build and test automation |
+| MySQL | 8.4 | World population database |
+| MySQL Connector/J | 26.7.0 | JDBC connectivity |
+| Docker | Docker Desktop / Docker Compose | Containerised application and database |
+| JUnit Jupiter | 5.11.4 | Automated tests |
+| H2 | 2.3.232 | In-memory test database |
+| JaCoCo | 0.8.16 | Code coverage |
+| Git and GitHub | Version control and repository hosting | Issues, branches, pull requests and collaboration |
+| GitHub Actions | CI workflows | Builds, tests, coverage and container verification |
+| IntelliJ IDEA | Java IDE | Development and debugging |
 
 ## 3. Use Case Diagram
 
-<img width="548" height="632" alt="use-case-diagram" src="https://github.com/user-attachments/assets/2a540d11-d768-481a-bdfb-a5fedcde233a" />
+![Project use-case overview](docs/use-case-diagram.png)
 
+The console-based Population Reporting System generates reports using the MySQL World database. Reports cover countries, cities, capitals, population distribution, selected population totals and language statistics. Configurable location and Top N parameters support the relevant reports.
 
-The use case diagram illustrates how a user interacts with the Population Reporting System to generate reports from the MySQL World database.
-
-The system supports reporting on countries, cities, capital cities, populations and language statistics.
-
-Users can select relevant locations, such as continents and regions, and request reports ordered by population. Some reports allow the user to specify a Top N value.
-
-For Code Review 1, our team implemented and verified the first six country reporting requirements.
+The existing overview diagram and [Sprint 1 detailed use cases](docs/use-case-diagram.md) are retained. The detailed use cases cover the six original country reports; their extension to the remaining features is subject to the team's documentation review.
 
 ## 4. Results and Outcomes
 
-### Implementation Progress
+**32 of 32 functional requirements implemented (100%).** All feature issues are closed and their implementation PRs have been merged into `develop` as of the evidence snapshot. This is the development-branch status, not a new production release.
 
-**6 of 32 requirements completed (18.75%).**
+| Category | Implemented | Total |
+|---|---:|---:|
+| Country Reports | 6 | 6 |
+| City Reports | 10 | 10 |
+| Capital City Reports | 6 | 6 |
+| Population Distribution Reports | 3 | 3 |
+| Population Information | 6 | 6 |
+| Language Statistics | 1 | 1 |
+| **Total** | **32** | **32** |
 
-The six completed requirements cover country reporting features. The remaining 26 requirements are planned for future development.
+Each row links to its issue, merged PR and actual console screenshot. Long report screenshots show representative visible rows rather than every result. Figures are from the supplied World database, not current demographic estimates. District totals represent recorded city populations in the selected district.
 
 ### 4.1 Country Reports
 
-| ID | Requirement                                | GitHub Issue | Met? | Output Screenshot |
-| -- | ------------------------------------------ | ------------ | ---- | ----------------- |
-| 1  | All countries in the world by population   | #2           | Yes  | <img width="1448" height="796" alt="issue-02" src="https://github.com/user-attachments/assets/11a26ef7-d82f-4a62-bca7-fddb589a4aae" />|
-| 2  | All countries in a continent by population | #4           | Yes  | <img width="1096" height="760" alt="issue-04" src="https://github.com/user-attachments/assets/1441f53c-38d0-45b9-94e5-82bc24bd64fe" />|
-| 3  | All countries in a region by population    | #6           | Yes  | <img width="787" height="390" alt="issue-06" src="https://github.com/user-attachments/assets/b6bc45e4-cf2e-40e3-a337-5b69f744d03f" /> |
-| 4  | Top N countries in the world               | #7           | Yes  | <img width="957" height="312" alt="issue-07" src="https://github.com/user-attachments/assets/626f8943-ccb4-47bc-95d5-aa35c032373a" /> |
-| 5  | Top N countries in a continent             | #8           | Yes  | <img width="896" height="247" alt="issue-08" src="https://github.com/user-attachments/assets/46d843d6-6d04-4711-be33-91599c4f07fe" /> |
-| 6  | Top N countries in a region                | #9           | Yes  | <img width="847" height="255" alt="issue-09" src="https://github.com/user-attachments/assets/943daaff-1338-4144-a597-ad8fcf9350c1" /> |
+| ID | Requirement | GitHub Issue | Pull Request | Met? | Output Screenshot |
+|---:|---|---|---|---|---|
+| 1 | All countries in the world by population | [#2](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/2) | [#37](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/37) | Yes | [<img src="docs/screenshots/issue-02.png" width="320" alt="Issue 2 output" />](docs/screenshots/issue-02.png) |
+| 2 | All countries in a continent by population | [#4](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/4) | [#37](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/37) | Yes | [<img src="docs/screenshots/issue-04.png" width="320" alt="Issue 4 output" />](docs/screenshots/issue-04.png) |
+| 3 | All countries in a region by population | [#6](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/6) | [#38](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/38) | Yes | [<img src="docs/screenshots/issue-06.png" width="320" alt="Issue 6 output" />](docs/screenshots/issue-06.png) |
+| 4 | Top N countries in the world | [#7](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/7) | [#41](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/41) | Yes | [<img src="docs/screenshots/issue-07.png" width="320" alt="Issue 7 output" />](docs/screenshots/issue-07.png) |
+| 5 | Top N countries in a continent | [#8](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/8) | [#40](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/40) | Yes | [<img src="docs/screenshots/issue-08.png" width="320" alt="Issue 8 output" />](docs/screenshots/issue-08.png) |
+| 6 | Top N countries in a region | [#9](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/9) | [#40](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/40) | Yes | [<img src="docs/screenshots/issue-09.png" width="320" alt="Issue 9 output" />](docs/screenshots/issue-09.png) |
 
 ### 4.2 City Reports
 
-| ID | Requirement                             | Met? | Output Screenshot |
-| -- | --------------------------------------- | ---- | ----------------- |
-| 7  | All cities in the world by population   | No   | —                 |
-| 8  | All cities in a continent by population | No   | —                 |
-| 9  | All cities in a region by population    | No   | —                 |
-| 10 | All cities in a country by population   | No   | —                 |
-| 11 | All cities in a district by population  | No   | —                 |
-| 12 | Top N cities in the world               | No   | —                 |
-| 13 | Top N cities in a continent             | No   | —                 |
-| 14 | Top N cities in a region                | No   | —                 |
-| 15 | Top N cities in a country               | No   | —                 |
-| 16 | Top N cities in a district              | No   | —                 |
+| ID | Requirement | GitHub Issue | Pull Request | Met? | Output Screenshot |
+|---:|---|---|---|---|---|
+| 7 | All cities in the world by population | [#10](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/10) | [#62](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/62) | Yes | [<img src="docs/screenshots/issue-10.png" width="320" alt="Issue 10 output" />](docs/screenshots/issue-10.png) |
+| 8 | All cities in a continent by population | [#11](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/11) | [#63](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/63) | Yes | [<img src="docs/screenshots/issue-11.png" width="320" alt="Issue 11 output" />](docs/screenshots/issue-11.png) |
+| 9 | All cities in a region by population | [#12](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/12) | [#59](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/59) | Yes | [<img src="docs/screenshots/issue-12.png" width="320" alt="Issue 12 output" />](docs/screenshots/issue-12.png) |
+| 10 | All cities in a country by population | [#13](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/13) | [#60](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/60) | Yes | [<img src="docs/screenshots/issue-13.png" width="320" alt="Issue 13 output" />](docs/screenshots/issue-13.png) |
+| 11 | All cities in a district by population | [#14](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/14) | [#58](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/58) | Yes | [<img src="docs/screenshots/issue-14.png" width="320" alt="Issue 14 output" />](docs/screenshots/issue-14.png) |
+| 12 | Top N cities in the world | [#15](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/15) | [#64](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/64) | Yes | [<img src="docs/screenshots/issue-15.png" width="320" alt="Issue 15 output" />](docs/screenshots/issue-15.png) |
+| 13 | Top N cities in a continent | [#16](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/16) | [#65](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/65) | Yes | [<img src="docs/screenshots/issue-16.png" width="320" alt="Issue 16 output" />](docs/screenshots/issue-16.png) |
+| 14 | Top N cities in a region | [#17](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/17) | [#66](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/66) | Yes | [<img src="docs/screenshots/issue-17.png" width="320" alt="Issue 17 output" />](docs/screenshots/issue-17.png) |
+| 15 | Top N cities in a country | [#18](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/18) | [#67](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/67) | Yes | [<img src="docs/screenshots/issue-18.png" width="320" alt="Issue 18 output" />](docs/screenshots/issue-18.png) |
+| 16 | Top N cities in a district | [#19](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/19) | [#68](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/68) | Yes | [<img src="docs/screenshots/issue-19.png" width="320" alt="Issue 19 output" />](docs/screenshots/issue-19.png) |
 
 ### 4.3 Capital City Reports
 
-| ID | Requirement                         | Met? | Output Screenshot |
-| -- | ----------------------------------- | ---- | ----------------- |
-| 17 | All capital cities in the world     | No   | —                 |
-| 18 | All capital cities in a continent   | No   | —                 |
-| 19 | All capital cities in a region      | No   | —                 |
-| 20 | Top N capital cities in the world   | No   | —                 |
-| 21 | Top N capital cities in a continent | No   | —                 |
-| 22 | Top N capital cities in a region    | No   | —                 |
+| ID | Requirement | GitHub Issue | Pull Request | Met? | Output Screenshot |
+|---:|---|---|---|---|---|
+| 17 | All capital cities in the world by population | [#20](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/20) | [#69](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/69) | Yes | [<img src="docs/screenshots/issue-20.png" width="320" alt="Issue 20 output" />](docs/screenshots/issue-20.png) |
+| 18 | All capital cities in a continent by population | [#21](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/21) | [#70](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/70) | Yes | [<img src="docs/screenshots/issue-21.png" width="320" alt="Issue 21 output" />](docs/screenshots/issue-21.png) |
+| 19 | All capital cities in a region by population | [#22](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/22) | [#71](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/71) | Yes | [<img src="docs/screenshots/issue-22.png" width="320" alt="Issue 22 output" />](docs/screenshots/issue-22.png) |
+| 20 | Top N capital cities in the world | [#23](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/23) | [#72](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/72) | Yes | [<img src="docs/screenshots/issue-23.png" width="320" alt="Issue 23 output" />](docs/screenshots/issue-23.png) |
+| 21 | Top N capital cities in a continent | [#24](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/24) | [#82](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/82) | Yes | [<img src="docs/screenshots/issue-24.png" width="320" alt="Issue 24 output" />](docs/screenshots/issue-24.png) |
+| 22 | Top N capital cities in a region | [#25](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/25) | [#83](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/83) | Yes | [<img src="docs/screenshots/issue-25.png" width="320" alt="Issue 25 output" />](docs/screenshots/issue-25.png) |
 
 ### 4.4 Population Distribution Reports
 
-| ID | Requirement                                                   | Met? | Output Screenshot |
-| -- | ------------------------------------------------------------- | ---- | ----------------- |
-| 23 | Population living and not living in cities for each continent | No   | —                 |
-| 24 | Population living and not living in cities for each region    | No   | —                 |
-| 25 | Population living and not living in cities for each country   | No   | —                 |
+| ID | Requirement | GitHub Issue | Pull Request | Met? | Output Screenshot |
+|---:|---|---|---|---|---|
+| 23 | Population living and not living in cities for each continent, including percentages | [#26](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/26) | [#73](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/73) | Yes | [<img src="docs/screenshots/issue-26.png" width="320" alt="Issue 26 output" />](docs/screenshots/issue-26.png) |
+| 24 | Population living and not living in cities for each region, including percentages | [#27](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/27) | [#74](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/74) | Yes | [<img src="docs/screenshots/issue-27.png" width="320" alt="Issue 27 output" />](docs/screenshots/issue-27.png) |
+| 25 | Population living and not living in cities for each country, including percentages | [#28](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/28) | [#75](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/75) | Yes | [<img src="docs/screenshots/issue-28.png" width="320" alt="Issue 28 output" />](docs/screenshots/issue-28.png) |
 
 ### 4.5 Population Information
 
-| ID | Requirement               | Met? | Output Screenshot |
-| -- | ------------------------- | ---- | ----------------- |
-| 26 | Population of the world   | No   | —                 |
-| 27 | Population of a continent | No   | —                 |
-| 28 | Population of a region    | No   | —                 |
-| 29 | Population of a country   | No   | —                 |
-| 30 | Population of a district  | No   | —                 |
-| 31 | Population of a city      | No   | —                 |
+| ID | Requirement | GitHub Issue | Pull Request | Met? | Output Screenshot |
+|---:|---|---|---|---|---|
+| 26 | Population of the world | [#29](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/29) | [#88](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/88) | Yes | [<img src="docs/screenshots/issue-29.png" width="320" alt="Issue 29 output" />](docs/screenshots/issue-29.png) |
+| 27 | Population of a selected continent | [#30](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/30) | [#89](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/89) | Yes | [<img src="docs/screenshots/issue-30.png" width="320" alt="Issue 30 output" />](docs/screenshots/issue-30.png) |
+| 28 | Population of a selected region | [#31](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/31) | [#90](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/90) | Yes | [<img src="docs/screenshots/issue-31.png" width="320" alt="Issue 31 output" />](docs/screenshots/issue-31.png) |
+| 29 | Population of a selected country | [#32](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/32) | [#91](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/91) | Yes | [<img src="docs/screenshots/issue-32.png" width="320" alt="Issue 32 output" />](docs/screenshots/issue-32.png) |
+| 30 | Population of a selected district | [#33](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/33) | [#86](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/86) | Yes | [<img src="docs/screenshots/issue-33.png" width="320" alt="Issue 33 output" />](docs/screenshots/issue-33.png) |
+| 31 | Population of a selected city | [#34](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/34) | [#84](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/84) | Yes | [<img src="docs/screenshots/issue-34.png" width="320" alt="Issue 34 output" />](docs/screenshots/issue-34.png) |
 
 ### 4.6 Language Statistics
 
-| ID | Requirement                                                                            | Met? | Output Screenshot |
-| -- | -------------------------------------------------------------------------------------- | ---- | ----------------- |
-| 32 | Population speaking Chinese, English, Hindi, Spanish and Arabic, including percentages | No   | —                 |
+| ID | Requirement | GitHub Issue | Pull Request | Met? | Output Screenshot |
+|---:|---|---|---|---|---|
+| 32 | Population speaking Chinese, English, Hindi, Spanish and Arabic, including percentages of world population; sorted by number of speakers | [#35](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/35) | [#85](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/85) | Yes | [<img src="docs/screenshots/issue-35.png" width="320" alt="Issue 35 output" />](docs/screenshots/issue-35.png) |
 
 ## 5. Completed Feature Evidence
 
-### Requirement 1 — All Countries in the World
+The screenshots in Section 4 demonstrate all 32 report outputs. Issues #2, #4 and #6 retain their Code Review 1 screenshots; Issues #7–#35 use the refreshed screenshots supplied for Code Review 2. Full-size evidence is available in [docs/screenshots](docs/screenshots/).
 
-This report displays all countries from the World database in descending order of population. It includes the country code, name, continent, region, population and capital.
-
-**[Insert Issue #2 output screenshot]**
-
-### Requirement 2 — Countries in a Continent
-
-This report displays the countries in a selected continent, such as Asia, ordered from the largest population to the smallest.
-
-**[Insert Issue #4 output screenshot]**
-
-### Requirement 3 — Countries in a Region
-
-This report displays all countries in a selected region, such as Eastern Asia, sorted by population.
-
-**[Insert Issue #6 output screenshot]**
-
-### Requirement 4 — Top N Countries in the World
-
-This report allows a configurable N value and displays the N most populated countries in the world. For testing, the system was configured to display the Top 5 countries.
-
-**[Insert Issue #7 output screenshot]**
-
-### Requirement 5 — Top N Countries in a Continent
-
-This report displays the N most populated countries in a selected continent. The current demonstration shows the Top 3 countries in Asia.
-
-**[Insert Issue #8 output screenshot]**
-
-### Requirement 6 — Top N Countries in a Region
-
-This report displays the N most populated countries in a selected region. The current demonstration shows the Top 3 countries in Eastern Asia.
-
-**[Insert Issue #9 output screenshot]**
+Since Code Review 1, the team has added the city and capital reports, population distribution reports, individual population information and language statistics. Supporting work includes automated unit and integration testing, JaCoCo coverage and a bug reporting system. Changes are traceable through the linked feature PRs.
 
 ## 6. Testing and Outcome
 
-For Code Review 1, Group 11 successfully implemented six country reporting requirements.
+Verification snapshot: `64d6faf` on `develop`, 25 November 2026.
 
-The integrated application connected to the MySQL World database and generated the required report outputs.
+| Workflow | Total tests | Passed | Failures | Errors | Skipped | Status |
+|---|---:|---:|---:|---:|---:|---|
+| Unit and H2-backed tests | 433 | 430 | 0 | 0 | 3 | Passed |
+| Full suite with MySQL integration | 433 | 433 | 0 | 0 | 0 | Passed |
+| JaCoCo coverage | 433 | 430 | 0 | 0 | 3 | Passed |
+| Maven and Docker CI | — | — | — | — | — | Passed |
 
-Verification included:
+The three MySQL integration tests are intentionally skipped when database credentials are unset. The separate MySQL integration workflow executes all three successfully. These suites overlap; the test counts must not be added together. The local Maven test run completed with `BUILD SUCCESS` in 7.890 seconds. The final four features added 64 passing tests.
 
-- Successful Maven build.
-- 21 passing JUnit tests.
-- Successful GitHub Actions checks.
-- Successful execution of all six reports.
-- Application finished with exit code 0.
+| GitHub Actions evidence | Result |
+|---|---|
+| [Unit Testing](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/45585708452) | Success |
+| [MySQL Integration Testing](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/45585707971) | Success |
+| [Code Coverage](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/45585707900) | Success |
+| [Maven and Docker CI](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/45585707758) | Success |
 
-The remaining requirements will be implemented during subsequent development work.
+Supporting PRs: [integration testing](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/61), [unit testing #78](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/78), [coverage #79](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/79) and [coverage action maintenance #87](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/87).
 
-## 7. Conclusion
-
-Group 11 has established the initial DevOps development workflow and implemented six of the 32 population reporting requirements.
-
-The completed features demonstrate successful database integration, population-based sorting, configurable Top N reporting, and automated testing.
-
-Further development will focus on completing the remaining city, capital city, population and language reporting requirements.
-
-## 8. Individual Contribution Percentages
-| Matric            | Code Review 1                   | Code Review 2                                         |
-| ----------------- | ------------------------------- | ----------------------------------------------------- |
-| 40841053          | 17                              | -                                                     |
-| 40841054          | 17                              | -                                                     |
-| 40841060          | 17                              | -                                                     |
-| 40841062          | 17                              | -                                                     |
-| 40841068          | 15                              | -                                                     |
-| 40840490          | 17                              | -                                                     |
-| Total             | 100                             | -                                                     |
-
-## 9. Automated Test Coverage (JaCoCo)
-
-JaCoCo measures the Java production code exercised by the automated tests. The
-coverage baseline is based on features implemented at the time of each run.
-No application-class exclusions or minimum coverage percentage are configured.
-
-### Generate the report locally (Windows PowerShell)
-
-From the repository root, with JDK 25 and Maven installed:
+Run unit and H2-backed tests from the repository root in Windows PowerShell:
 
 ```powershell
 Remove-Item Env:DB_PASSWORD -ErrorAction SilentlyContinue
-mvn clean verify
+mvn -B clean test
 ```
 
-The command runs the JUnit suite, including H2 in-memory report tests, and
-creates the coverage report during Maven's `verify` phase. With `DB_PASSWORD`
-unset, the three real MySQL integration tests are skipped; those tests run
-separately in the existing Group 11 Integration Testing workflow. MySQL and
-Docker are not required for this coverage run.
+The Maven/Docker CI workflow verifies application build and execution with Docker Compose. The JaCoCo workflow's action versions were upgraded through PR #87; this does not claim that deprecation warnings in other workflows were removed.
 
-Open the HTML report:
+## 7. Conclusion
+
+All 32 functional requirements are implemented and merged into `develop`. All four CI workflows passed at the verified snapshot. The test suite has zero failures and zero errors; the full integration run passed all 433 tests. The final coverage figures and screenshots are recorded below. The final release and Code Review 2 contribution agreement remain separate activities.
+
+## 8. Individual Contribution Percentages
+
+| Matric | Code Review 1 | Code Review 2 |
+|---|---:|---:|
+| 40841053 | 17% | Pending agreement |
+| 40841054 | 17% | Pending agreement |
+| 40841060 | 17% | Pending agreement |
+| 40841062 | 17% | Pending agreement |
+| 40841068 | 15% | Pending agreement |
+| 40840490 | 17% | Pending agreement |
+| **Total** | **100%** | **Pending agreement** |
+
+Code Review 1 percentages are retained. Code Review 2 percentages must be agreed by the team and total 100% before final submission.
+
+## 9. Automated Test Coverage (JaCoCo)
+
+Final development snapshot: `64d6faf`, 25 November 2026. JaCoCo measures production code exercised by unit and H2-backed tests.
+
+| Metric | Covered | Total | Coverage |
+|---|---:|---:|---:|
+| Instruction | 5,411 | 5,632 | 96.08% |
+| Line | 1,133 | 1,191 | 95.13% |
+| Branch | 420 | 510 | 82.35% |
+
+Line and branch counts match the successful GitHub coverage run. Instruction counts come from the local report. The HTML report displays rounded percentages. No application-class exclusions or minimum coverage threshold are configured. Untested branches remain, particularly in the core application and population report packages.
+
+![Final local JaCoCo report](docs/screenshots/jacoco-final-coverage.png)
+
+### Generate the report locally (Windows PowerShell)
 
 ```powershell
+Remove-Item Env:DB_PASSWORD -ErrorAction SilentlyContinue
+mvn -B clean verify
 Start-Process (Resolve-Path "target/site/jacoco/index.html")
 ```
 
-The full report directory is `target/site/jacoco/`, including `index.html`,
-`jacoco.xml` and `jacoco.csv`. Keep the whole directory together to preserve
-links and styles. Generated reports belong in the build output, not in Git.
+The full report is generated under `target/site/jacoco/`, including `index.html`, `jacoco.xml` and `jacoco.csv`. Generated build output is not committed to Git. Download the `group11-jacoco-coverage` artifact from the [successful coverage run](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/45585707900), extract it and open `index.html`. Use missed lines and branches to guide future tests. Coverage does not replace MySQL integration or Docker verification.
 
-### Review measured coverage
+## 10. GitHub Bug Reporting System
 
-- Line coverage measures which executable source lines were exercised.
-- Branch coverage measures which outcomes of conditional decisions were exercised.
-- Open the HTML report and inspect low-coverage packages, classes and methods.
-  Use highlighted missed lines and branches to identify useful additional tests.
-- Record the actual line and branch percentages and any gaps in the pull request.
-  Passing tests do not by themselves guarantee high code coverage.
-- Extend tests and measure coverage again as remaining report features are merged.
+The bug reporting template and resolution documentation were added through [Issue #80](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/80) and [PR #81](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/81).
 
-### Download the report from GitHub Actions
+- [Bug report template](.github/ISSUE_TEMPLATE/bug_report.md): description, reproduction steps, expected and actual behaviour, environment, severity and evidence.
+- [Bug reporting process](docs/bug-reporting.md): prioritisation, assignment, fix branch, regression testing, PR review and closure.
 
-Open the repository's **Actions** tab and select **Group 11 Code Coverage**.
-Open a successful run for the relevant branch or pull request. The job summary
-shows measured line and branch coverage. Download the
-`group11-jacoco-coverage` artifact, extract the ZIP and open `index.html` in
-its extracted directory. The workflow runs on pushes to `develop` and
-`test/code-coverage`, and on pull requests targeting `develop`.
-
-The existing independent unit testing, MySQL integration testing, and Maven
-and Docker CI workflows remain separate. Coverage reporting does not replace
-those checks.
+Severity levels are Critical, High, Medium and Low. Only genuine defects should be recorded as bugs. The documented process uses `fix/issue-N-short-description` branches and reviewed pull requests targeting `develop`.
