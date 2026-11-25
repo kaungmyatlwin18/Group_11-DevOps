@@ -30,6 +30,7 @@ import com.napier.sem.report.country.TopNCountriesByContinentReport;
 import com.napier.sem.report.country.TopNCountriesByRegionReport;
 import com.napier.sem.report.country.TopNCountriesInWorldReport;
 import com.napier.sem.report.population.WorldPopulationReport;
+import com.napier.sem.report.population.SelectedContinentPopulationReport;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -144,6 +145,10 @@ public final class AutoDisplay {
 
         System.out.println("\n===== ISSUE #29 =====");
         new WorldPopulationReport().display(connection);
+
+        System.out.println("\n===== ISSUE #30 =====");
+        new SelectedContinentPopulationReport().display(
+                connection, SelectedContinentPopulationReport.configuredContinent());
 
         // Existing country-only tests use a minimal H2 city table.
         // Run city reports when the complete World database schema is available.
