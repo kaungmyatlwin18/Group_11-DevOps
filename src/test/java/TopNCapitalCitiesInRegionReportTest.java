@@ -131,6 +131,23 @@ public class TopNCapitalCitiesInRegionReportTest {
     }
 
     @Test
+    void returnsExactlyTwoCapitalsWhenTwoAreRequested() throws SQLException {
+        try (Connection connection = database()) {
+            List<CapitalRow> result =
+                    capitals(connection, "Eastern Asia", 2);
+
+            assertEquals(2, result.size());
+
+            assertEquals(
+                    List.of("Charlie", "Alpha"),
+                    result.stream()
+                            .map(CapitalRow::name)
+                            .toList()
+            );
+        }
+    }
+
+    @Test
     void supportsTopOne() throws SQLException {
         try (Connection connection = database()) {
             assertEquals(List.of("Charlie"), names(connection, "Eastern Asia", 1));
