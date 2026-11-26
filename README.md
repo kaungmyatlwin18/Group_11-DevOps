@@ -215,4 +215,31 @@ The bug reporting template and resolution documentation were added through [Issu
 - [Bug report template](.github/ISSUE_TEMPLATE/bug_report.md): description, reproduction steps, expected and actual behaviour, environment, severity and evidence.
 - [Bug reporting process](docs/bug-reporting.md): prioritisation, assignment, fix branch, regression testing, PR review and closure.
 
-Severity levels are Critical, High, Medium and Low. Only genuine defects should be recorded as bugs. The documented process uses `fix/issue-N-short-description` branches and reviewed pull requests targeting `develop`.
+Severity levels are Critical, High, Medium and Low. Only genuine defects should be recorded as ordinary bugs; controlled fault-injection exercises must be explicitly labelled as demonstrations. The documented process uses `fix/issue-N-short-description` branches and reviewed pull requests targeting `develop`.
+
+### 10.1 Error and Bug Register
+
+The [Error and Bug Register](docs/error-and-bug-log.md) records four historical development/CI errors and one controlled application-logic defect demonstration. It contains the observed symptoms, corrective or recovery actions, verification results, evidence limitations and 25 supporting screenshots.
+
+| ID | Error or bug | Outcome |
+|---|---|---|
+| ERROR-01 | Docker Hub HTTP 429 rate limit | CI recovered after changing base-image registry |
+| ERROR-02 | Docker Hub HTTP 504 gateway timeout | CI recovered after changing base-image registry |
+| ERROR-03 | JaCoCo plugin resolution failure | Same workflow rerun successfully; underlying cause unconfirmed |
+| ERROR-04 | Java compilation failure | Later successful build verified; original fix unconfirmed |
+| BUG-01 | Top N capital cities in a region returns one fewer result | Controlled defect reproduced locally; regression test merged |
+
+### 10.2 Controlled Bug Reporting and Resolution Demonstration
+
+On 26 November 2026, the team demonstrated the bug reporting workflow using an intentionally introduced off-by-one error on an isolated local branch. The original shared implementation was correct, and the defective code was not committed or merged. The controlled exercise is recorded separately from genuine historical errors.
+
+- **Bug report:** [Issue #94](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/94), related to [Issue #25](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/25).
+- **Developer:** Htoo Aung Lin; **Scrum Master reviewer:** Kaung Myat Lwin.
+- **Reviewed PR:** [PR #95](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/95), merged into `develop` at [`3092ca3`](https://github.com/kaungmyatlwin18/Group_11-DevOps/commit/3092ca3e3a41803dbf16c3aca8eb532106149bee).
+- **Result:** All 20 related tests passed; the post-merge MySQL integration workflow passed all 434 tests with zero failures, errors or skips. All four post-merge CI workflows passed.
+
+| Bug detection | Formal review |
+|---|---|
+| [![JUnit detected the controlled defect](docs/bug-evidence/bug-01-junit-test-failure.png)](docs/bug-evidence/bug-01-junit-test-failure.png) | [![Scrum Master approval](docs/bug-evidence/bug-01-pr-approval.png)](docs/bug-evidence/bug-01-pr-approval.png) |
+
+See the [complete resolution evidence and test results](docs/error-and-bug-log.md#4-bug-01--top-n-capital-cities-report-returns-one-fewer-result) and [evidence directory](docs/bug-evidence/). This later verification is separate from the Code Review 2 snapshot dated 25 November 2026.
