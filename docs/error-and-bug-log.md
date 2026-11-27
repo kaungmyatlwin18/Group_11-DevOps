@@ -2,12 +2,12 @@
 
 **Module:** SET09803 DevOps<br>
 **Project:** Population Reporting System<br>
-**Evidence review:** 26 November 2026<br>
+**Evidence review:** 27 November 2026<br>
 **Verified application baseline:** `develop` at `3092ca3`
 
 ## 1. Purpose and scope
 
-This register records four historical development or CI errors and one controlled application-logic defect demonstration. It distinguishes observed symptoms, confirmed corrective actions, recovery evidence and unresolved historical root causes. BUG-01 is a deliberately introduced local defect for demonstrating the bug reporting process, not a defect discovered in the shared production implementation.
+This register records four historical development or CI errors, one controlled application-logic defect demonstration and one genuine historical CI/CD configuration defect. It distinguishes observed symptoms, confirmed corrective actions, recovery evidence and unresolved historical root causes. BUG-01 is a deliberately introduced local defect for demonstrating the bug reporting process, not a defect discovered in the shared production implementation. BUG-02 is a historical workflow configuration defect corrected during unit testing setup.
 
 The [bug reporting process](bug-reporting.md) and [GitHub issue template](../.github/ISSUE_TEMPLATE/bug_report.md) define the team's normal reporting and resolution workflow. Screenshots are stored in [bug-evidence/](bug-evidence/).
 
@@ -20,6 +20,7 @@ The [bug reporting process](bug-reporting.md) and [GitHub issue template](../.gi
 | ERROR-03 | JaCoCo Maven plugin resolution failure | Dependency resolution | Successful rerun; underlying cause not established |
 | ERROR-04 | Java compilation failure in `CountryReport.java` | Compilation / syntax | Current build verified; original corrective change not established |
 | BUG-01 | Top N region report returns one fewer capital than requested | Application logic — controlled exercise | Local defect corrected; additional regression test reviewed and merged |
+| BUG-02 | Incorrect unit testing workflow branch trigger | CI/CD configuration — historical defect | Branch filter corrected and merged; PR workflow passed |
 
 ## 3. Historical errors
 
@@ -148,6 +149,8 @@ The shared `develop` and `master` branches did not receive the intentionally def
 
 [![Developer successful JUnit test](bug-evidence/bug-01-junit-test-success.png)](bug-evidence/bug-01-junit-test-success.png)
 
+The replacement screenshot shows a successful single-test run of the related test class at 23:00:34 on 26 November 2026. The exact method and its position relative to the local correction are not visible in that screenshot; successful PR and post-merge CI independently verify the corrected behaviour.
+
 ### 4.3 Supplementary regression test
 
 Developer 1 added `returnsExactlyTwoCapitalsWhenTwoAreRequested()` to `src/test/java/TopNCapitalCitiesInRegionReportTest.java`. It checks that the query returns exactly two capital rows and that their names are `Charlie`, then `Alpha`, in the expected population order for the fixture. The existing tests and production implementation were preserved.
@@ -193,7 +196,71 @@ Developer 1 added `returnsExactlyTwoCapitalsWhenTwoAreRequested()` to `src/test/
 
 The three skipped integration tests in the unit-only environment ran successfully in the MySQL integration workflow. The regression test increased the project test count from 433 to 434. These results are tied to the stated workflow runs, not a replacement for the earlier Code Review 2 evidence snapshot in the README.
 
-## 5. Lessons learned and preventive actions
+## 5. BUG-02 — Incorrect unit testing workflow branch trigger
+
+**Correction date:** 19 November 2026.<br>
+**Category:** CI/CD configuration defect (genuine historical defect).<br>
+**Related issue:** [Issue #76 — Unit Testing](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/76).<br>
+**Affected file:** `.github/workflows/unit-tests.yml`.<br>
+**Correction author:** Kaung Myat Lwin (`kaungmyatlwin18`).<br>
+**Status:** Corrected and merged into `develop` through PR #78.
+
+### 5.1 Diagnosis
+
+The original independent unit testing workflow configured a push branch filter that did not match the actual working branch, `test/unit-testing`. As a result, a push to that working branch would not satisfy the workflow's push filter. The separate `pull_request` trigger targeting `develop` and manual dispatch were unaffected. This diagnosis is based on the historical configuration diff, rather than a captured failed test or a failed push-triggered run.
+
+**Original configuration:**
+
+```yaml
+on:
+  push:
+    branches:
+      - develop
+      - test/issue-76-unit-tests
+```
+
+[Original workflow commit `3222f4e`](https://github.com/kaungmyatlwin18/Group_11-DevOps/commit/3222f4effcda7787e26e46366b133629199decd0)
+
+### 5.2 Corrective action
+
+The Scrum Master corrected the branch filter to match the actual working branch. No application source changes were needed for this correction.
+
+```yaml
+on:
+  push:
+    branches:
+      - develop
+      - test/unit-testing
+```
+
+**Correction commit:** [`0788b20`](https://github.com/kaungmyatlwin18/Group_11-DevOps/commit/0788b2004ee69dab9611815bcf52f47bda5fdf38) — `fix(ci): correct unit testing branch trigger (#76)`.
+
+| Original incorrect configuration | Corrected configuration |
+|---|---|
+| [![Incorrect push branch filter](bug-evidence/bug-02-incorrect-trigger.png)](bug-evidence/bug-02-incorrect-trigger.png) | [![Corrected push branch filter](bug-evidence/bug-02-trigger-fix.png)](bug-evidence/bug-02-trigger-fix.png) |
+
+### 5.3 Verification and merge
+
+The [independent unit testing workflow run](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/44499559920) succeeded on correction commit `0788b20`, with head branch `test/unit-testing` and event `pull_request`. The [actual job log](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/44499559920/job/135475414567) confirms the following results:
+
+| Metric | Result |
+|---|---:|
+| Total tests | 283 |
+| Passed | 280 |
+| Failures | 0 |
+| Errors | 0 |
+| Skipped MySQL integration tests | 3 |
+| Maven build | SUCCESS |
+
+The correction was included in [PR #78](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/78), merged into `develop` at [`d788801`](https://github.com/kaungmyatlwin18/Group_11-DevOps/commit/d7888011d0d40842f28bc28fd56641ec18ffd481). The PR records the branch-trigger correction as part of Issue #76. No separate historical bug issue or additional developer fix is claimed.
+
+| Successful PR workflow | Merged pull request |
+|---|---|
+| [![Successful unit testing workflow](bug-evidence/bug-02-ci-success.png)](bug-evidence/bug-02-ci-success.png) | [![Merged PR 78](bug-evidence/bug-02-pr-merged.png)](bug-evidence/bug-02-pr-merged.png) |
+
+**Evidence limitation:** The successful workflow confirms that automated tests ran on the corrected commit through the PR trigger. It is not direct evidence that the corrected push trigger fired. No failed CI run is claimed for this configuration mismatch. The 283-test result is historical and does not replace the later 434-test verification in BUG-01.
+
+## 6. Lessons learned and preventive actions
 
 | Area | Recommended preventive action |
 |---|---|
@@ -201,6 +268,7 @@ The three skipped integration tests in the unit-only environment ran successfull
 | Dependency resolution | Record dependency versions and workflow logs; investigate repeat resolution failures rather than treating every successful retry as a permanent fix. |
 | Compilation | Run Maven compilation and tests before pushing; retain the exact failing diff and corrective commit when possible. |
 | Application logic | Test result boundaries, including N = 1, N = 2, N = 3 and N greater than the available records. |
+| CI/CD configuration | Cross-check workflow branch filters against actual working branches and verify each intended event type independently. |
 | Team process | Use issue reporting, isolated branches, reviewed PRs, automated CI and closure evidence; distinguish demonstrations from historical production defects. |
 
-**Evidence inventory:** 25 PNG files (9 historical error screenshots, 9 Scrum Master screenshots and 7 Developer 1 screenshots). Historical source limitations are explicitly recorded above.
+**Evidence inventory:** 29 PNG files (9 historical error screenshots, 9 BUG-01 Scrum Master screenshots, 7 BUG-01 Developer 1 screenshots and 4 BUG-02 screenshots). Historical source limitations are explicitly recorded above.
