@@ -28,7 +28,7 @@ The overview diagram groups the system's reporting functionality into broader re
 - `App.java` establishes the World database connection and calls `AutoDisplay.displayAllReports(...)`.
 - `AutoDisplay.java` invokes Issue #2, #4, #6, #8, #9 and #7 in that actual execution order.
 - The reports are printed to the **console**. The reviewed application does **not** include an interactive selection menu.
-- The automatic demonstration uses **Asia**, **Eastern Asia**, and normally **Top N = 3**; only the world Top N (#7) supports a configurable value through `topN.world` or `TOP_N_WORLD` in the reviewed runner.
+- The country report defaults remain **Asia**, **Eastern Asia**, and **Top N = 3**. Issue #7 supports `topN.world` or `TOP_N_WORLD`. Issue #8 accepts `country.continent` and `country.continent.topN` JVM properties; Issue #9 accepts `country.region` and `country.region.topN` JVM properties. Set these in the VM Options of `com.napier.sem.App`. The six detailed use cases describe Sprint 1 country reports, not all 32 current reports.
 - `CountryReport.java` contains the shared SQL logic and `ReportDisplay.java` formats the output.
 
 ## Evidence for Review

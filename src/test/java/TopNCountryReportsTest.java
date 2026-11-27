@@ -1,3 +1,4 @@
+import com.napier.sem.AutoDisplay;
 import com.napier.sem.report.country.TopNCountriesByContinentReport;
 import com.napier.sem.report.country.TopNCountriesByRegionReport;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -147,6 +150,119 @@ public class TopNCountryReportsTest {
             assertTrue(countryCodes(regionOutput).isEmpty());
             assertTrue(continentOutput.contains("No results found."));
             assertTrue(regionOutput.contains("No results found."));
+        }
+    }
+
+    private static final List<String> COUNTRY_OPTIONS = List.of(
+            "country.continent", "country.continent.topN", "country.region", "country.region.topN");
+
+    /** Isolate JVM properties so each test restores the previous configuration. */
+    private void withCountryOptions(Map<String, String> options, SqlAction action) throws SQLException {
+        Map<String, String> previous = new HashMap<>();
+        try {
+            for (String key : COUNTRY_OPTIONS) {
+                previous.put(key, System.getProperty(key));
+                if (options.containsKey(key)) {
+                    System.setProperty(key, options.get(key));
+                } else {
+                    System.clearProperty(key);
+                }
+            }
+            action.run();
+        } finally {
+            for (String key : previous.keySet()) {
+                String value = previous.get(key);
+                if (value == null) {
+                    System.clearProperty(key);
+                } else {
+                    System.setProperty(key, value);
+                }
+            }
+        }
+    }
+
+    private String issueOutput(String allReports, int issue) {
+        String marker = "===== ISSUE #" + issue + " =====";
+        int start = allReports.indexOf(marker);
+        assertTrue(start >= 0, "Missing report marker: " + marker);
+        int end = allReports.indexOf("===== ISSUE #", start + marker.length());
+        return end < 0 ? allReports.substring(start) : allReports.substring(start, end);
+    }
+
+    @Test
+    void automaticRunnerUsesIndependentUserProvidedLimits() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            withCountryOptions(Map.of("country.continent.topN", "2", "country.region.topN", "1"), () -> {
+                String output = captureOutput(() -> AutoDisplay.displayAllReports(connection));
+                String continent = issueOutput(output, 8);
+                String region = issueOutput(output, 9);
+                assertTrue(continent.contains("TOP 2 COUNTRIES IN CONTINENT: Asia"));
+                assertEquals(List.of("CHN", "IND"), countryCodes(continent));
+                assertTrue(region.contains("TOP 1 COUNTRIES IN REGION: Eastern Asia"));
+                assertEquals(List.of("CHN"), countryCodes(region));
+            });
+        }
+    }
+
+    @Test
+    void automaticRunnerUsesUserProvidedLocationsAndTrimsOptions() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            withCountryOptions(Map.of("country.continent", " North America ",
+                    "country.continent.topN", " 1 ", "country.region", " Southeast Asia ",
+                    "country.region.topN", " 2 "), () -> {
+                String output = captureOutput(() -> AutoDisplay.displayAllReports(connection));
+                String continent = issueOutput(output, 8);
+                String region = issueOutput(output, 9);
+                assertTrue(continent.contains("TOP 1 COUNTRIES IN CONTINENT: North America"));
+                assertEquals(List.of("USA"), countryCodes(continent));
+                assertTrue(region.contains("TOP 2 COUNTRIES IN REGION: Southeast Asia"));
+                assertEquals(List.of("IDN"), countryCodes(region));
+            });
+        }
+    }
+
+    @Test
+    void automaticRunnerPreservesDefaultsWhenOptionsAreMissingOrBlank() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            for (Map<String, String> options : List.of(Map.<String, String>of(),
+                    Map.of("country.continent", " ", "country.continent.topN", " ",
+                            "country.region", " ", "country.region.topN", " "))) {
+                withCountryOptions(options, () -> {
+                    String output = captureOutput(() -> AutoDisplay.displayAllReports(connection));
+                    String continent = issueOutput(output, 8);
+                    String region = issueOutput(output, 9);
+                    assertTrue(continent.contains("TOP 3 COUNTRIES IN CONTINENT: Asia"));
+                    assertEquals(List.of("CHN", "IND", "JPN"), countryCodes(continent));
+                    assertTrue(region.contains("TOP 3 COUNTRIES IN REGION: Eastern Asia"));
+                    assertEquals(List.of("CHN", "JPN", "KOR"), countryCodes(region));
+                });
+            }
+        }
+    }
+
+    @Test
+    void automaticRunnerRejectsInvalidContinentLimits() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            for (String invalid : List.of("0", "-2", "abc", "2.5")) {
+                withCountryOptions(Map.of("country.continent.topN", invalid), () -> {
+                    IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
+                            () -> captureOutput(() -> AutoDisplay.displayAllReports(connection)));
+                    assertTrue(error.getMessage().contains("country.continent.topN"));
+                });
+            }
+        }
+    }
+
+    @Test
+    void automaticRunnerRejectsInvalidRegionLimits() throws Exception {
+        try (Connection connection = createTestDatabase()) {
+            for (String invalid : List.of("0", "-2", "abc", "2.5")) {
+                withCountryOptions(Map.of("country.region.topN", invalid), () -> {
+                    IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
+                            () -> captureOutput(() -> AutoDisplay.displayAllReports(connection)));
+                    assertTrue(error.getMessage().contains("country.region.topN"));
+                });
+            }
         }
     }
 }
