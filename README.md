@@ -7,14 +7,17 @@
 
 * Unit Testing [![Unit Testing](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/unit-tests.yml/badge.svg?branch=develop)](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/unit-tests.yml)
 * Integration Testing [![Integration Testing](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/integration-tests.yml/badge.svg?branch=develop)](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/integration-tests.yml)
-* Code Coverage Workflow [![Code Coverage Workflow](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/code-coverage.yml/badge.svg?branch=develop)](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/code-coverage.yml)
+* Develop Code Coverage Workflow [![Develop Code Coverage Workflow](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/code-coverage.yml/badge.svg?branch=develop)](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/code-coverage.yml)
+* Master Code Coverage Workflow [![Master Code Coverage Workflow](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/code-coverage.yml/badge.svg?branch=master)](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/workflows/code-coverage.yml?query=branch%3Amaster)
+
+The coverage workflow badges show workflow status, not the measured coverage percentage. Final master coverage and release verification remain pending.
 
 # Group 11 — DevOps Project Report
 
 **Module:** SET09803 DevOps
 **Project:** Population Reporting System
 **Code Review:** 2
-**Evidence snapshot:** 25 November 2026 (`develop`, `64d6faf`)
+**Evidence snapshot:** 28 November 2026 (`develop`, `31d6c65`) — combined application after PRs #98, #99 and #101.
 
 ## 1. Team Members
 
@@ -53,7 +56,7 @@ The existing overview diagram and [Sprint 1 detailed use cases](docs/use-case-di
 
 ## 4. Results and Outcomes
 
-**32 of 32 functional requirements implemented (100%).** All feature issues are closed and their implementation PRs have been merged into `develop` as of the evidence snapshot. This is the development-branch status, not a new production release.
+**32 of 32 functional requirements implemented (100%).** All feature implementations are merged into `develop`. Final IntelliJ and default Docker executions produced all 32 expected report sections. This is the development-branch status, not a new production release or proof of every possible input configuration.
 
 | Category | Implemented | Total |
 |---|---:|---:|
@@ -75,8 +78,8 @@ Each row links to its issue, merged PR and actual console screenshot. Long repor
 | 2 | All countries in a continent by population | [#4](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/4) | [#37](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/37) | Yes | [<img src="docs/screenshots/issue-04.png" width="320" alt="Issue 4 output" />](docs/screenshots/issue-04.png) |
 | 3 | All countries in a region by population | [#6](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/6) | [#38](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/38) | Yes | [<img src="docs/screenshots/issue-06.png" width="320" alt="Issue 6 output" />](docs/screenshots/issue-06.png) |
 | 4 | Top N countries in the world | [#7](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/7) | [#41](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/41) | Yes | [<img src="docs/screenshots/issue-07.png" width="320" alt="Issue 7 output" />](docs/screenshots/issue-07.png) |
-| 5 | Top N countries in a continent | [#8](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/8) | [#40](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/40) | Yes | [<img src="docs/screenshots/issue-08.png" width="320" alt="Issue 8 output" />](docs/screenshots/issue-08.png) |
-| 6 | Top N countries in a region | [#9](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/9) | [#40](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/40) | Yes | [<img src="docs/screenshots/issue-09.png" width="320" alt="Issue 9 output" />](docs/screenshots/issue-09.png) |
+| 5 | Top N countries in a continent | [#8](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/8) | [#40](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/40), [#98](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/98) | Yes | [<img src="docs/screenshots/issue-08.png" width="320" alt="Issue 8 output" />](docs/screenshots/issue-08.png) |
+| 6 | Top N countries in a region | [#9](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/9) | [#40](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/40), [#98](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/98) | Yes | [<img src="docs/screenshots/issue-09.png" width="320" alt="Issue 9 output" />](docs/screenshots/issue-09.png) |
 
 ### 4.2 City Reports
 
@@ -131,44 +134,59 @@ Each row links to its issue, merged PR and actual console screenshot. Long repor
 
 ## 5. Completed Feature Evidence
 
-The screenshots in Section 4 demonstrate all 32 report outputs. Issues #2, #4 and #6 retain their Code Review 1 screenshots; Issues #7–#35 use the refreshed screenshots supplied for Code Review 2. Full-size evidence is available in [docs/screenshots](docs/screenshots/).
+The screenshots in Section 4 demonstrate all 32 report outputs. Issues #2, #4 and #6 retain their Code Review 1 screenshots; the other report screenshots are retained from Code Review 2 except Issues #8 and #9, which have been refreshed using the final combined application. All 32 expected requirement screenshot paths exist at the verified baseline. See the [final verification record](docs/final-evidence/README.md) for the latest runtime checks and evidence limitations. Full-size evidence is available in [docs/screenshots](docs/screenshots/).
 
 Since Code Review 1, the team has added the city and capital reports, population distribution reports, individual population information and language statistics. Supporting work includes automated unit and integration testing, JaCoCo coverage and a bug reporting system. Changes are traceable through the linked feature PRs.
 
 ## 6. Testing and Outcome
 
-Verification snapshot: `64d6faf` on `develop`, 25 November 2026.
+Verification snapshot: `31d6c65` on `develop`, 28 November 2026.
 
-| Workflow | Total tests | Passed | Failures | Errors | Skipped | Status |
+| Workflow / test scope | Total tests | Passed | Failures | Errors | Skipped | Status |
 |---|---:|---:|---:|---:|---:|---|
-| Unit and H2-backed tests | 433 | 430 | 0 | 0 | 3 | Passed |
-| Full suite with MySQL integration | 433 | 433 | 0 | 0 | 0 | Passed |
-| JaCoCo coverage | 433 | 430 | 0 | 0 | 3 | Passed |
-| Maven and Docker CI | — | — | — | — | — | Passed |
+| Unit and H2-backed tests | 445 | 442 | 0 | 0 | 3 | Passed |
+| Full suite with MySQL integration | 445 | 445 | 0 | 0 | 0 | Passed |
+| JaCoCo coverage | 445 | 442 | 0 | 0 | 3 | Passed |
+| Maven and Docker CI | 445 | 442 | 0 | 0 | 3 | Passed |
+| Local Maven clean verify | 445 | 442 | 0 | 0 | 3 | Passed |
 
-The three MySQL integration tests are intentionally skipped when database credentials are unset. The separate MySQL integration workflow executes all three successfully. These suites overlap; the test counts must not be added together. The local Maven test run completed with `BUILD SUCCESS` in 7.890 seconds. The final four features added 64 passing tests.
+The three MySQL integration tests are intentionally skipped when database credentials are unset. The separate MySQL integration workflow executed all three successfully. These suites overlap; do not add their test counts together. The local Maven build completed with `BUILD SUCCESS` in 10.084 seconds.
 
-| GitHub Actions evidence | Result |
+| Post-merge GitHub Actions evidence | Result |
 |---|---|
-| [Unit Testing](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/45585708452) | Success |
-| [MySQL Integration Testing](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/45585707971) | Success |
-| [Code Coverage](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/45585707900) | Success |
-| [Maven and Docker CI](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/45585707758) | Success |
+| [Unit Testing](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/46155389733) | Success |
+| [MySQL Integration Testing](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/46155389834) | Success |
+| [Code Coverage](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/46155389760) | Success |
+| [Maven and Docker CI](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/46155389736) | Success |
 
-Supporting PRs: [integration testing](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/61), [unit testing #78](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/78), [coverage #79](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/79) and [coverage action maintenance #87](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/87).
+Supporting PRs: [integration testing](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/61), [unit testing #78](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/78), [coverage #79](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/79), [coverage action maintenance #87](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/87), [runtime Top N #98](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/98), [master coverage trigger #99](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/99) and [Docker deployment #101](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/101).
 
 Run unit and H2-backed tests from the repository root in Windows PowerShell:
 
 ```powershell
 Remove-Item Env:DB_PASSWORD -ErrorAction SilentlyContinue
-mvn -B clean test
+mvn -B clean verify
 ```
 
-The Maven/Docker CI workflow verifies application build and execution with Docker Compose. The JaCoCo workflow's action versions were upgraded through PR #87; this does not claim that deprecation warnings in other workflows were removed.
+### 6.1 Final execution verification
+
+| Check | Result |
+|---|---|
+| IntelliJ report sections | 32/32 |
+| Issue #8 runtime input | Europe, N = 5 |
+| Issue #9 runtime input | Southeast Asia, N = 2 |
+| Default Docker entry point | 32 distinct expected report sections |
+| Missing, unexpected or duplicate sections | 0 |
+| Database connection / completion marker | Confirmed |
+| Database error scan | 0 matches |
+| Successful local deployment exit code | 0 (recorded in original terminal output) |
+| Missing credentials test | Exit code 1 verified in Issue #100 and CI |
+
+See the [final verification record](docs/final-evidence/README.md), [complete Docker output](docs/final-evidence/group11-final-deployment.txt) and [deployment summary screenshot](docs/final-evidence/final-docker-deployment-success.png). Default Docker uses default report parameters; the custom runtime configuration was verified separately in IntelliJ. The supplied dataset warnings and Windows console character-rendering limitation are disclosed in the verification record.
 
 ## 7. Conclusion
 
-All 32 functional requirements are implemented and merged into `develop`. All four CI workflows passed at the verified snapshot. The test suite has zero failures and zero errors; the full integration run passed all 433 tests. The final coverage figures and screenshots are recorded below. The final release and Code Review 2 contribution agreement remain separate activities.
+All 32 report implementations are merged into `develop`, and all 32 report sections executed in the final local IntelliJ and default Docker runs. All four post-merge CI workflows passed. The full MySQL integration suite passed all 445 tests with no skips, failures or errors. The local and coverage runs passed 442 tests with three intentional skips. Final coverage is recorded below. Final master release and Code Review 2 contribution agreement remain separate activities. Report execution and code coverage do not establish exhaustive functional correctness.
 
 ## 8. Individual Contribution Percentages
 
@@ -186,15 +204,18 @@ Code Review 1 percentages are retained. Code Review 2 percentages must be agreed
 
 ## 9. Automated Test Coverage (JaCoCo)
 
-Final development snapshot: `64d6faf`, 25 November 2026. JaCoCo measures production code exercised by unit and H2-backed tests.
+Development snapshot: `31d6c65`, 28 November 2026. JaCoCo measures production code exercised by unit and H2-backed tests.
 
 | Metric | Covered | Total | Coverage |
 |---|---:|---:|---:|
-| Instruction | 5,411 | 5,632 | 96.08% |
-| Line | 1,133 | 1,191 | 95.13% |
-| Branch | 420 | 510 | 82.35% |
+| Instruction | 5,527 | 5,754 | 96.05% |
+| Line | 1,172 | 1,231 | 95.21% |
+| Branch | 435 | 528 | 82.39% |
+| Method | 202 | 212 | 95.28% |
+| Class | 69 | 71 | 97.18% |
+| Complexity | 393 | 476 | 82.56% |
 
-Line and branch counts match the successful GitHub coverage run. Instruction counts come from the local report. The HTML report displays rounded percentages. No application-class exclusions or minimum coverage threshold are configured. Untested branches remain, particularly in the core application and population report packages.
+The percentages are calculated from the exact missed and total counters in the local HTML report. Line and branch counts match the [post-merge GitHub coverage job](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/46155389760/job/141010799369). The HTML report displays whole-number percentages. No application-class exclusions or minimum coverage threshold are configured. Untested branches remain, particularly in the core application and population report packages.
 
 ![Final local JaCoCo report](docs/screenshots/jacoco-final-coverage.png)
 
@@ -206,7 +227,7 @@ mvn -B clean verify
 Start-Process (Resolve-Path "target/site/jacoco/index.html")
 ```
 
-The full report is generated under `target/site/jacoco/`, including `index.html`, `jacoco.xml` and `jacoco.csv`. Generated build output is not committed to Git. Download the `group11-jacoco-coverage` artifact from the [successful coverage run](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/45585707900), extract it and open `index.html`. Use missed lines and branches to guide future tests. Coverage does not replace MySQL integration or Docker verification.
+The full report is generated under `target/site/jacoco/`, including `index.html`, `jacoco.xml` and `jacoco.csv`. Generated build output is not committed to Git. Download the `group11-jacoco-coverage` artifact from the [successful coverage run](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/46155389760), extract it and open `index.html`. Use missed lines and branches to guide future tests. Coverage does not replace MySQL integration or Docker verification. PR #99 enabled the coverage workflow on pushes to master; a measured master coverage percentage must be recorded after the final master merge.
 
 ## 10. GitHub Bug Reporting System
 
@@ -219,7 +240,7 @@ Severity levels are Critical, High, Medium and Low. Only genuine defects should 
 
 ### 10.1 Error and Bug Register
 
-The [Error and Bug Register](docs/error-and-bug-log.md) records four historical development/CI errors, one controlled application-logic defect demonstration and one genuine historical CI/CD configuration defect. It contains the observed symptoms, corrective or recovery actions, verification results, evidence limitations and 29 supporting screenshots.
+The [Error and Bug Register](docs/error-and-bug-log.md) records four historical development/CI errors, one controlled application-logic defect demonstration, one genuine historical CI/CD configuration defect and two genuine defects resolved during final verification. The original 29 historical screenshots are preserved, together with the later BUG-03 and Issue #100 evidence.
 
 | ID | Error or bug | Outcome |
 |---|---|---|
@@ -229,6 +250,8 @@ The [Error and Bug Register](docs/error-and-bug-log.md) records four historical 
 | ERROR-04 | Java compilation failure | Later successful build verified; original fix unconfirmed |
 | BUG-01 | Top N capital cities in a region returns one fewer result | Controlled defect reproduced locally; regression test merged |
 | BUG-02 | Incorrect unit testing workflow push branch trigger | Branch filter corrected; PR CI passed and correction merged |
+| BUG-03 | Fixed runtime location and Top N for country reports #8 and #9 | [Issue #97](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/97) closed; [PR #98](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/98) merged; corrected runtime output verified |
+| BUG-04 | Docker JAR launched demonstration instead of complete reports | [Issue #100](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/100) closed; [PR #101](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/101) merged; default Docker execution and failure handling verified |
 
 ### 10.2 Controlled Bug Reporting and Resolution Demonstration
 
@@ -243,7 +266,7 @@ On 26 November 2026, the team demonstrated the bug reporting workflow using an i
 |---|---|
 | [![JUnit detected the controlled defect](docs/bug-evidence/bug-01-junit-test-failure.png)](docs/bug-evidence/bug-01-junit-test-failure.png) | [![Scrum Master approval](docs/bug-evidence/bug-01-pr-approval.png)](docs/bug-evidence/bug-01-pr-approval.png) |
 
-See the [complete resolution evidence and test results](docs/error-and-bug-log.md#4-bug-01--top-n-capital-cities-report-returns-one-fewer-result) and [evidence directory](docs/bug-evidence/). This later verification is separate from the Code Review 2 snapshot dated 25 November 2026.
+See the [complete resolution evidence and test results](docs/error-and-bug-log.md#4-bug-01--top-n-capital-cities-report-returns-one-fewer-result) and [evidence directory](docs/bug-evidence/). These are historical results from the controlled demonstration; the current combined results are in Section 6.
 
 ### 10.3 Historical CI/CD Configuration Bug
 
@@ -265,7 +288,7 @@ See [BUG-02 in the error and bug register](docs/error-and-bug-log.md#5-bug-02--i
 
 The application entry point was corrected, database connection retry handling was added, and unsuccessful database connections now return a non-zero exit code.
 
-Verification results:
+Historical issue-branch verification results (before the final combined merge):
 
 - All 32 expected report sections executed using the default Docker entry point.
 - Six new deployment regression tests passed.
@@ -275,4 +298,16 @@ Verification results:
 
 See the [deployment investigation and verification record](docs/bug-evidence/issue-100-deployment/README.md) for the complete implementation details, before-and-after comparison, screenshots and CI evidence.
 
-Independent pull request approval and merge into develop remain pending.
+[PR #101](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/101) was independently reviewed, approved and merged into `develop` on 28 November 2026 at `31d6c65`. Issue #100 is closed. All four post-merge CI workflows passed; the final local default Docker run again executed 32 distinct expected reports. The historical 440-test count above is not the final combined count.
+
+### 10.5 Runtime Top N configuration — Issue #97 (BUG-03)
+
+[Issue #97](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/97) identified fixed continent/region and N values in the report runner for Issues #8 and #9. [PR #98](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/98) introduced independent runtime parameters, retained default values, validated N and added five regression tests. The PR was independently approved and merged into `develop` at `cbc3cca`; Issue #97 is closed.
+
+The final IntelliJ run confirmed five countries in Europe for #8 and two countries in Southeast Asia for #9. See the [updated Issue #8 screenshot](docs/screenshots/issue-08.png), [updated Issue #9 screenshot](docs/screenshots/issue-09.png) and [historical bug evidence](docs/bug-evidence/bug-03-after-output.png).
+
+PR #99 separately enabled master coverage workflow execution. It is a CI configuration enhancement, not an additional application bug.
+
+## 11. Final Evidence and Release Readiness
+
+The [final evidence index](docs/final-evidence/README.md) records the combined development verification, screenshots, full deployment log and remaining release checks. Code Review 2 contribution percentages remain pending team agreement. The final Kanban snapshot and master verification must be captured after the remaining documentation/release steps; the existing historical evidence is retained.
