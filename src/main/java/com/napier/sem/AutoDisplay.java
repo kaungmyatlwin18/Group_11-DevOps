@@ -77,6 +77,29 @@ public final class AutoDisplay {
         }
     }
 
+    /** Reads a user-supplied country report location, or preserves the demo default. */
+    private static String configuredCountryLocation(String property, String defaultLocation) {
+        String raw = System.getProperty(property);
+        return raw == null || raw.isBlank() ? defaultLocation : raw.trim();
+    }
+
+    /** Reads a positive user-supplied Top N for Issue #8 or #9. */
+    private static int configuredCountryTopN(String property) {
+        String raw = System.getProperty(property);
+        if (raw == null || raw.isBlank()) {
+            return DEFAULT_TOP_N;
+        }
+        try {
+            int n = Integer.parseInt(raw.trim());
+            if (n <= 0) {
+                throw new IllegalArgumentException(property + " must be greater than zero");
+            }
+            return n;
+        } catch (NumberFormatException error) {
+            throw new IllegalArgumentException(property + " must be a positive whole number", error);
+        }
+    }
+
     /**
      * Selects a city region through the optional -Dcity.region JVM property.
      * Uses the existing default region when no value is supplied.
@@ -137,10 +160,14 @@ public final class AutoDisplay {
         new CountriesByRegionReport().display(connection, DEFAULT_REGION);
 
         System.out.println("\n===== ISSUE #8 =====");
-        new TopNCountriesByContinentReport().display(connection, DEFAULT_CONTINENT, DEFAULT_TOP_N);
+        new TopNCountriesByContinentReport().display(connection,
+                configuredCountryLocation("country.continent", DEFAULT_CONTINENT),
+                configuredCountryTopN("country.continent.topN"));
 
         System.out.println("\n===== ISSUE #9 =====");
-        new TopNCountriesByRegionReport().display(connection, DEFAULT_REGION, DEFAULT_TOP_N);
+        new TopNCountriesByRegionReport().display(connection,
+                configuredCountryLocation("country.region", DEFAULT_REGION),
+                configuredCountryTopN("country.region.topN"));
 
         System.out.println("\n===== ISSUE #7 =====");
         new TopNCountriesInWorldReport().display(connection, worldTopN());

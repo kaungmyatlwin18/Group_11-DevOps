@@ -21,7 +21,7 @@
 ## Main Success Scenario
 
 1. The user runs the Java application and a World database connection is established.
-2. `AutoDisplay` calls `TopNCountriesByContinentReport.display(connection, "Asia", 3)` for Issue #8.
+2. `AutoDisplay` reads `country.continent` and `country.continent.topN` JVM properties and passes the selected continent and N to the report method for Issue #8. When no non-blank values are supplied, the default is **Asia** and **N = 3**.
 3. The shared `CountryReport.displayTopNCountriesInContinent(...)` method checks for a non-blank continent and a positive N.
 4. A parameterised SQL query filters on `c.Continent = ?`, orders populations descending (country code ascending for ties), and applies `LIMIT ?`.
 5. The system retrieves each matching country's code, name, continent, region, population and capital.
@@ -29,8 +29,8 @@
 
 ## Extensions
 
-- **E1 – Blank or null continent:** The report method throws `IllegalArgumentException`.
-- **E2 – N is zero or negative:** The method throws `IllegalArgumentException`.
+- **E1 – Blank or null continent:** The direct report method rejects blank/null values; the automatic runner instead uses its default for missing or blank JVM settings.
+- **E2 – N is non-numeric, non-integer, zero or negative:** The runner rejects the supplied JVM value with `IllegalArgumentException`.
 - **E3 – No matches:** The console prints `No results found.`.
 - **E4 – Fewer than N matching countries:** Only the existing matches are displayed.
 - **E5 – Database/SQL failure:** `App` reports the database error.
@@ -39,9 +39,10 @@ The reviewed application does not provide a prompt to correct invalid parameters
 
 ## Sub-Variations
 
-- The automatic run uses **Asia** and **N = 3**.
-- The shared report method supports another non-blank continent and positive N when called with different parameters.
-- Unlike Issue #7, the automatic runner does **not** read a property or environment variable for this report's N.
+- The automatic run defaults to **Asia** and **N = 3**.
+- Before running `com.napier.sem.App` in IntelliJ, the user may set VM options: `-Dcountry.continent="Europe" -Dcountry.continent.topN=2`.
+- Whitespace around the input is trimmed. Missing or blank settings use the defaults. A supplied non-integer or non-positive N is rejected.
+- The same parameterised SQL, sorting and output columns are retained. No interactive selection menu is required.
 
 ## Expected Report Output
 
@@ -55,6 +56,6 @@ Each row contains **Code, Name, Continent, Region, Population, Capital**, with t
 - **Report class:** `TopNCountriesByContinentReport` (called by `AutoDisplay.java`).
 - **Shared query method:** `CountryReport.displayTopNCountriesInContinent(...)`.
 - **Output formatter:** `ReportDisplay.printTable(...)`.
-- **Evidence:** Add a genuine console-output screenshot for Issue #8 under `docs/screenshots/` and link it in the project `README.md`.
+- **Evidence:** Capture a genuine console-output screenshot using a non-default location and N, and retain it with the final assessment evidence.
 
-*Documentation basis: `App.java`, `AutoDisplay.java`, `CountryReport.java` and `ReportDisplay.java` supplied for review. The six individual report-wrapper class bodies were not supplied; their invocation is visible in `AutoDisplay.java`.*
+*Documentation basis: the report runner, report wrapper, shared SQL and formatter. Runtime input enhancement is subject to build, test and review verification.*

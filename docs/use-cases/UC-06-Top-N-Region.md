@@ -21,7 +21,7 @@
 ## Main Success Scenario
 
 1. The user launches the application and `App.main()` connects to the World database.
-2. `AutoDisplay` calls `TopNCountriesByRegionReport.display(connection, "Eastern Asia", 3)` for Issue #9.
+2. `AutoDisplay` reads `country.region` and `country.region.topN` JVM properties and passes the selected region and N to the report method for Issue #9. When no non-blank values are supplied, the default is **Eastern Asia** and **N = 3**.
 3. `CountryReport.displayTopNCountriesInRegion(...)` validates that the region is non-blank and N is positive.
 4. The parameterised SQL query filters rows with `c.Region = ?`, orders them by descending population with country code as a tie-breaker, and limits results with `LIMIT ?`.
 5. The system retrieves the matching records and capital names.
@@ -29,8 +29,8 @@
 
 ## Extensions
 
-- **E1 – Blank/null region:** `IllegalArgumentException` is thrown.
-- **E2 – N is zero or negative:** `IllegalArgumentException` is thrown.
+- **E1 – Blank/null region:** The direct report method rejects blank/null values; the automatic runner instead uses its default for missing or blank JVM settings.
+- **E2 – N is non-numeric, non-integer, zero or negative:** The runner rejects the supplied JVM value with `IllegalArgumentException`.
 - **E3 – No matching region data:** The formatter prints `No results found.`.
 - **E4 – Fewer than N matches:** The report contains only available records.
 - **E5 – Database/SQL failure:** `App` prints a database error message.
@@ -39,9 +39,10 @@ No interactive error-recovery prompt is present in the reviewed code.
 
 ## Sub-Variations
 
-- The automatic run uses **Eastern Asia** and **N = 3**.
-- The underlying shared method permits a different valid region or positive N from calling code.
-- Runtime region and Top N selections are not provided by the current automatic runner.
+- The automatic run defaults to **Eastern Asia** and **N = 3**.
+- Before running `com.napier.sem.App` in IntelliJ, the user may set VM options: `-Dcountry.region="Southeast Asia" -Dcountry.region.topN=2`.
+- Whitespace around the input is trimmed. Missing or blank settings use the defaults. A supplied non-integer or non-positive N is rejected.
+- The same parameterised SQL, sorting and output columns are retained. No interactive selection menu is required.
 
 ## Expected Report Output
 
@@ -55,6 +56,6 @@ Each row contains **Code, Name, Continent, Region, Population, Capital**, with t
 - **Report class:** `TopNCountriesByRegionReport` (called by `AutoDisplay.java`).
 - **Shared query method:** `CountryReport.displayTopNCountriesInRegion(...)`.
 - **Output formatter:** `ReportDisplay.printTable(...)`.
-- **Evidence:** Add a genuine console-output screenshot for Issue #9 under `docs/screenshots/` and link it in the project `README.md`.
+- **Evidence:** Capture a genuine console-output screenshot using a non-default location and N, and retain it with the final assessment evidence.
 
-*Documentation basis: `App.java`, `AutoDisplay.java`, `CountryReport.java` and `ReportDisplay.java` supplied for review. The six individual report-wrapper class bodies were not supplied; their invocation is visible in `AutoDisplay.java`.*
+*Documentation basis: the report runner, report wrapper, shared SQL and formatter. Runtime input enhancement is subject to build, test and review verification.*
