@@ -3,6 +3,7 @@ name: Group 11 Code Coverage
 on:
   push:
     branches:
+      - master
       - develop
       - test/code-coverage
   pull_request:
