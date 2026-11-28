@@ -2,12 +2,12 @@
 
 **Module:** SET09803 DevOps<br>
 **Project:** Population Reporting System<br>
-**Evidence review:** 27 November 2026<br>
-**Verified application baseline:** `develop` at `3092ca3`
+**Evidence review:** 28 November 2026<br>
+**Verified application baseline:** `develop` at `31d6c65` (historical results retain their original baselines)
 
 ## 1. Purpose and scope
 
-This register records four historical development or CI errors, one controlled application-logic defect demonstration and one genuine historical CI/CD configuration defect. It distinguishes observed symptoms, confirmed corrective actions, recovery evidence and unresolved historical root causes. BUG-01 is a deliberately introduced local defect for demonstrating the bug reporting process, not a defect discovered in the shared production implementation. BUG-02 is a historical workflow configuration defect corrected during unit testing setup.
+This register records four historical development or CI errors, one controlled application-logic defect demonstration, one genuine historical CI/CD configuration defect and two genuine defects resolved during final verification. It distinguishes observed symptoms, confirmed corrective actions, recovery evidence and unresolved historical root causes. BUG-01 is a deliberately introduced local defect for demonstrating the bug reporting process, not a defect discovered in the shared production implementation. BUG-02 is a historical workflow configuration defect corrected during unit testing setup.
 
 The [bug reporting process](bug-reporting.md) and [GitHub issue template](../.github/ISSUE_TEMPLATE/bug_report.md) define the team's normal reporting and resolution workflow. Screenshots are stored in [bug-evidence/](bug-evidence/).
 
@@ -21,6 +21,8 @@ The [bug reporting process](bug-reporting.md) and [GitHub issue template](../.gi
 | ERROR-04 | Java compilation failure in `CountryReport.java` | Compilation / syntax | Current build verified; original corrective change not established |
 | BUG-01 | Top N region report returns one fewer capital than requested | Application logic — controlled exercise | Local defect corrected; additional regression test reviewed and merged |
 | BUG-02 | Incorrect unit testing workflow branch trigger | CI/CD configuration — historical defect | Branch filter corrected and merged; PR workflow passed |
+| BUG-03 | Fixed location and N in country reports #8 and #9 | Application runtime configuration | Issue #97 closed; PR #98 approved and merged; corrected output verified |
+| BUG-04 | Packaged JAR launched five-country demonstration | Deployment entry point and failure handling | Issue #100 closed; PR #101 approved and merged; default Docker output and CI verified |
 
 ## 3. Historical errors
 
@@ -271,4 +273,29 @@ The correction was included in [PR #78](https://github.com/kaungmyatlwin18/Group
 | CI/CD configuration | Cross-check workflow branch filters against actual working branches and verify each intended event type independently. |
 | Team process | Use issue reporting, isolated branches, reviewed PRs, automated CI and closure evidence; distinguish demonstrations from historical production defects. |
 
-**Evidence inventory:** 29 PNG files (9 historical error screenshots, 9 BUG-01 Scrum Master screenshots, 7 BUG-01 Developer 1 screenshots and 4 BUG-02 screenshots). Historical source limitations are explicitly recorded above.
+**Historical evidence inventory (ERROR-01–04 and BUG-01–02):** 29 PNG files (9 historical error screenshots, 9 BUG-01 Scrum Master screenshots, 7 BUG-01 Developer 1 screenshots and 4 BUG-02 screenshots). Historical source limitations are explicitly recorded above. Later BUG-03 and Issue #100 evidence is indexed in Sections 7–8.
+
+## 7. BUG-03 — Runtime Top N country configuration
+
+**Issue:** [#97](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/97). **Status:** Closed; [PR #98](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/98) independently approved and merged at `cbc3cca` on 28 November 2026.
+
+Issues #8 and #9 previously received fixed location and N defaults from `AutoDisplay.java`, ignoring custom runtime settings. PR #98 introduced independent location and N properties, validated invalid N values, preserved defaults and added five regression tests. The existing SQL queries were retained. UC-05 and UC-06 were updated. The issue-branch Maven run recorded 439 tests (436 passed, 3 skipped, 0 failures/errors); this is historical, not the final combined count.
+
+| Report | Before | Final IntelliJ output |
+|---|---|---|
+| #8 | Asia, N = 3 | Europe, N = 5 |
+| #9 | Eastern Asia, N = 3 | Southeast Asia, N = 2 |
+
+[Original output](bug-evidence/bug-03-before-output.png) · [Corrected issue-branch output](bug-evidence/bug-03-after-output.png) · [Final #8 screenshot](screenshots/issue-08.png) · [Final #9 screenshot](screenshots/issue-09.png).
+
+The final combined application at `31d6c65` confirmed both corrected outputs. All four post-merge CI workflows succeeded; MySQL integration passed all 445 tests. See the [final verification record](final-evidence/README.md).
+
+## 8. BUG-04 — Docker deployment entry point (Issue #100)
+
+**Issue:** [#100](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/100). **Status:** Closed; [PR #101](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/101) independently approved and merged at `31d6c65` on 28 November 2026.
+
+The packaged JAR originally selected `Main` and printed only five demonstration rows. The permanent correction selected `App`, added startup connection retries and non-zero failure exit codes, added six regression tests and strengthened CI to verify distinct report identifiers and missing credentials failure handling. Original failure screenshot unavailable; the historical terminal observations and reproduction procedure are documented in the [complete investigation](bug-evidence/issue-100-deployment/README.md).
+
+The final local default Docker run produced all 32 distinct expected report sections, zero missing/unexpected/duplicate identifiers, successful connection and completion, zero database error scan matches and exit code 0 (original terminal output). Missing credentials exit code 1 was separately verified on the issue branch and in CI. See the [final Docker screenshot](final-evidence/final-docker-deployment-success.png) and [full deployment output](final-evidence/group11-final-deployment.txt). Report execution completeness does not prove every input combination.
+
+PR #99 enabled master coverage workflow execution; it is a CI enhancement rather than an additional application defect. Measured master coverage remains pending final release verification.

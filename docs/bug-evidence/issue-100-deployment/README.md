@@ -55,6 +55,7 @@ No database schema or report-query changes were introduced.
 |---|---|
 | [394f09a](https://github.com/kaungmyatlwin18/Group_11-DevOps/commit/394f09a) | Application deployment correction and regression tests |
 | [21d3561](https://github.com/kaungmyatlwin18/Group_11-DevOps/commit/21d3561) | Automated CI deployment verification |
+| [ff6e07e](https://github.com/kaungmyatlwin18/Group_11-DevOps/commit/ff6e07e) | Documentation and screenshot evidence |
 
 ## 5. Local verification results
 
@@ -125,4 +126,13 @@ Successful execution of all 32 report sections establishes deployment completene
 
 Existing dataset warnings are outside the scope of this correction.
 
-The separate MySQL integration workflow, independent pull request approval and merge into develop remain pending.
+At the original issue-branch snapshot, independent approval, integration testing and merge were pending. These are now complete: [PR #101](https://github.com/kaungmyatlwin18/Group_11-DevOps/pull/101) was independently approved and merged into `develop` on 28 November 2026 at `31d6c65`. Issue #100 is closed.
+
+## 9. Final combined verification
+
+All four post-merge CI workflows passed on `31d6c65`. Maven recorded 445 tests, 442 passed and 3 skipped locally, with no failures/errors; the MySQL integration CI job passed all 445 without skips. The default Docker run produced all 32 distinct expected report identifiers and exit code 0 in the original terminal output, with no missing, unexpected or duplicate sections. The 440-test results in Section 5 are the historical issue-branch results.
+
+- [Final verification record](../../final-evidence/README.md)
+- [Final Docker summary](../../final-evidence/final-docker-deployment-success.png)
+- [Post-merge Docker CI](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/46155389736)
+- [Post-merge MySQL integration CI](https://github.com/kaungmyatlwin18/Group_11-DevOps/actions/runs/46155389834)
