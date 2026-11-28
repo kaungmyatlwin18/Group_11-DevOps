@@ -258,3 +258,21 @@ On 19 November 2026, the unit testing workflow's push branch filter was correcte
 | [![Original workflow configuration](docs/bug-evidence/bug-02-incorrect-trigger.png)](docs/bug-evidence/bug-02-incorrect-trigger.png) | [![Workflow branch correction](docs/bug-evidence/bug-02-trigger-fix.png)](docs/bug-evidence/bug-02-trigger-fix.png) |
 
 See [BUG-02 in the error and bug register](docs/error-and-bug-log.md#5-bug-02--incorrect-unit-testing-workflow-branch-trigger) for the full evidence and verification limitations.
+
+### 10.4 Docker deployment entry point - Issue #100
+
+[Issue #100](https://github.com/kaungmyatlwin18/Group_11-DevOps/issues/100) records a genuine deployment defect: the packaged JAR launched the five-country demonstration instead of the complete population reporting application.
+
+The application entry point was corrected, database connection retry handling was added, and unsuccessful database connections now return a non-zero exit code.
+
+Verification results:
+
+- All 32 expected report sections executed using the default Docker entry point.
+- Six new deployment regression tests passed.
+- Maven recorded 440 tests: 437 passed, 3 skipped, 0 failures and 0 errors.
+- Missing database credentials correctly returned exit code 1.
+- GitHub Actions successfully verified all 32 distinct report identifiers and failure handling.
+
+See the [deployment investigation and verification record](docs/bug-evidence/issue-100-deployment/README.md) for the complete implementation details, before-and-after comparison, screenshots and CI evidence.
+
+Independent pull request approval and merge into develop remain pending.

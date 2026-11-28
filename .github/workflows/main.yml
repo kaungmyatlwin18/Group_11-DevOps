@@ -8,6 +8,7 @@ jobs:
   build:
     name: Build and Test Application
     runs-on: ubuntu-22.04
+    timeout-minutes: 15
 
     steps:
       - name: Checkout Repository
@@ -25,10 +26,53 @@ jobs:
 
       - name: Generate Temporary Database Password
         shell: bash
-        run: echo "MYSQL_ROOT_PASSWORD=$(openssl rand -hex 24)" >> "$GITHUB_ENV"
+        run: |
+          password=$(openssl rand -hex 24)
+          echo "::add-mask::$password"
+          echo "MYSQL_ROOT_PASSWORD=$password" >> "$GITHUB_ENV"
 
       - name: Build and Test with Docker Compose
-        run: docker compose up --build --abort-on-container-exit --exit-code-from app
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker compose build
+          docker compose up -d db
+          docker compose run --rm --no-deps -T app 2>&1 | tee deployment-output.txt
+
+      - name: Verify all 32 report sections
+        shell: bash
+        run: |
+          python3 - <<'PYTHON'
+          import collections
+          import pathlib
+          import re
+
+          output = pathlib.Path('deployment-output.txt').read_text(encoding='utf-8', errors='replace')
+          ids = [int(value) for value in re.findall(r'^===== ISSUE #(\d+) =====\s*$', output, re.M)]
+          expected = collections.Counter([2, 4, *range(6, 36)])
+          actual = collections.Counter(ids)
+          if actual != expected:
+              raise SystemExit(f'Incorrect report sections: missing={dict(expected - actual)}, unexpected/duplicate={dict(actual - expected)}')
+          if 'Successfully connected to World database!' not in output:
+              raise SystemExit('Missing database connection confirmation')
+          if '========== AVAILABLE REPORTS COMPLETED ==========' not in output:
+              raise SystemExit('Missing report completion marker')
+          if re.search(r'Database error|Database connection failed|Exception', output, re.I):
+              raise SystemExit('Database error or exception detected in application output')
+          print('Deployment verified: 32 distinct expected report sections, connection and completion confirmed.')
+          PYTHON
+
+      - name: Verify missing credentials fail deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          docker compose run --rm --no-deps -T -e DB_PASSWORD= app > deployment-negative.txt 2>&1
+          status=$?
+          set -e
+          cat deployment-negative.txt
+          test "$status" -eq 1
+          grep -Fq 'Database error: DB_PASSWORD is not set' deployment-negative.txt
 
       - name: Clean Up Containers
         if: always()
